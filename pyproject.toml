@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scry-security"
+version = "0.1.0.dev0"
+description = "Cross-platform defensive security monitoring — See what others don't."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+    "pydantic-settings>=2.7,<3", "defusedxml>=0.7.1,<1", "PyYAML>=6.0.2,<7",
+    "psutil>=6.1,<8",
+    "SQLAlchemy>=2.0.38,<3",
+    "fastapi>=0.115,<1", "uvicorn>=0.34,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-cov>=6,<8", "ruff>=0.11,<1", "httpx2>=2,<3"]
+audit = ["pip-audit>=2.9,<3", "build>=1.2,<2"]
+windows = ["pywin32>=308; sys_platform == 'win32'"]
+packet-analysis = ["scapy>=2.6,<3"]
+
+[project.scripts]
+scry-security = "scry_security.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+scry_security = ["rule_catalog/*.yaml", "dashboard/*", "dashboard/static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

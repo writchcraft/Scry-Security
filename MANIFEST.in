@@ -1,0 +1,10 @@
+include LICENSE README.md SECURITY.md CONTRIBUTING.md pyproject.toml .env.example .gitignore
+recursive-include docs *.md *.json
+recursive-include examples *.toml
+recursive-include sample_logs *.txt *.xml *.jsonl *.pcap *.md
+recursive-include incident_reports *.json *.csv *.html
+recursive-include scripts *.py
+recursive-include screenshots *.jpg
+recursive-include tests *.py
+recursive-include .github *.yml
+global-exclude __pycache__ *.py[cod]
