@@ -1,0 +1,48 @@
+# Example-only host names and expectations. Edit using your approved inventory.
+# No wildcard host scopes and no automatic changes to native security settings.
+policy_id = "example-lab-policy"
+
+[[hosts]]
+operating_system = "windows"
+hostname = "windows-lab"
+privileged_accounts = ["lab-admin"]
+allowed_admin_sources = ["192.0.2.0/24"]
+approved_privilege_users = ["SYSTEM", "lab-admin"]
+approved_accounts = ["approved-lab-user"]
+approved_account_deletions = ["approved-leaver"]
+protected_accounts = ["breakglass", "security-service"]
+approved_account_actors = ["approved-provisioner"]
+privileged_groups = ["S-1-5-32-544"]
+approved_group_actors = ["approved-provisioner"]
+approved_services = ["ApprovedBackup"]
+approved_tasks = ["\\Maintenance\\Backup"]
+protected_tasks = ["\\Security\\HealthCheck"]
+approved_change_actors = ["approved-installer"]
+review_security_changes = true
+watched_processes = ["lab-watch.exe"]
+watched_command_fragments = ["--lab-watch-indicator"]
+watched_destinations = ["198.51.100.0/24"]
+watched_dns_suffixes = ["watched.example.invalid"]
+review_connection_bursts = false
+
+[[hosts]]
+operating_system = "linux"
+hostname = "linux-lab"
+privileged_accounts = ["root"]
+allowed_admin_sources = ["192.0.2.0/24"]
+approved_sudo_users = ["approved-operator"]
+approved_accounts = ["approved-lab-user"]
+approved_account_deletions = ["approved-leaver"]
+protected_accounts = ["root", "security-service"]
+approved_account_actors = ["approved-provisioner"]
+privileged_groups = ["sudo", "wheel"]
+approved_group_actors = ["approved-provisioner"]
+approved_services = ["approved-backup.service"]
+protected_services = ["security-monitor.service"]
+approved_tasks = ["crontab:approved-operator", "approved-backup.timer"]
+service_unit_directories = ["/etc/systemd/system"]
+task_config_directories = ["/etc/cron.d"]
+watched_processes = ["lab-watch"]
+watched_destinations = ["198.51.100.0/24"]
+watched_dns_suffixes = ["watched.example.invalid"]
+review_connection_bursts = false
