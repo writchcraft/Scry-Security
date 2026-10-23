@@ -1,0 +1,22 @@
+# Select ONE authentication source to avoid duplicate auth.log/journal telemetry.
+poll_seconds = 5
+synthetic = false
+
+[[sources]]
+source_id = "linux-journal"
+kind = "linux_journal"
+max_records = 1000
+
+# Alternative: disable linux-journal and enable a file source with explicit year/offset.
+# [[sources]]
+# source_id = "linux-auth"
+# kind = "linux_auth"
+# path = "/var/log/auth.log"
+# year = 2026
+# utc_offset = "+00:00"
+
+[[sources]]
+source_id = "connection-metadata"
+kind = "connections"
+max_records = 10000
+watched_ports = []
