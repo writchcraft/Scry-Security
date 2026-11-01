@@ -1,0 +1,200 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><title>Suspected SSH brute-force activity · Scry-Security</title><style>body{font:15px/1.6 system-ui,sans-serif;max-width:1100px;margin:40px auto;padding:0 24px;color:#17213b;background:#f7f8fc}header{border-bottom:3px solid #7664c5;padding-bottom:20px}h1{font-size:30px}h2{margin-top:32px;color:#463975}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #ccd0de;padding:9px;text-align:left;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#e9ebf3;padding:20px;font-size:11px}.label{font-weight:700;letter-spacing:2px;color:#6552a1}.note{background:#e9e5f5;padding:15px}@media print{body{margin:0;background:white}details{display:block}}</style></head><body><header><p class="label">SYNTHETIC LAB INVESTIGATION</p><h1>Suspected SSH brute-force activity</h1><p>Scry-Security · See what others don't.</p><p>Incident da8876c9-88ab-4bd5-9413-ff819265a6c4<br>Created 2026-11-01T20:10:48.436116+00:00 · Status investigating<br>Analyst: Synthetic lab author</p></header><h2>Incident summary</h2><p>Five SSH password failures are followed by an accepted password for the same account and source.</p><p class="note">Rule matches identify suspicious activity; they do not confirm compromise.</p><h2>Affected scope</h2><ul><li>Hosts: linux-lab</li><li>Operating systems: linux</li><li>Accounts: alice</li><li>Source addresses: 192.0.2.10</li><li>Destination addresses: Unavailable</li></ul><h2>Observed evidence</h2><ul><li>6 supporting events retained from 2 alert(s).</li><li>Event times span 2026-10-31T10:30:00+00:00 to 2026-10-31T10:30:05+00:00.</li><li>SCRY-AUTH-003: 6 supporting event(s); status new.</li><li>SCRY-AUTH-001: 5 supporting event(s); status new.</li></ul><h2>Analyst interpretation</h2><p>The sequence warrants investigation. It does not establish hostile access; check whether the account owner or an authorised lab exercise explains the activity.</p><h2>Detection context</h2><p>No additional host-policy context was recorded for these detections.</p><h2>Possible false positives</h2><ul><li>Expired credentials, user mistakes, and authorised testing can explain this pattern.</li></ul><h2>Recommended defensive actions</h2><ul><li>Validate with the owner; apply rate limiting and review account protection if unauthorised.</li></ul><h2>ATT&amp;CK references</h2><ul><li>T1110</li></ul><h2>UTC event timeline</h2><table><thead><tr><th>Time</th><th>Host</th><th>OS</th><th>Event</th><th>Account</th><th>Source</th></tr></thead><tbody><tr><td>2026-10-31T10:30:00+00:00</td><td>linux-lab</td><td>linux</td><td>authentication_failure</td><td>alice</td><td>192.0.2.10</td></tr><tr><td>2026-10-31T10:30:01+00:00</td><td>linux-lab</td><td>linux</td><td>authentication_failure</td><td>alice</td><td>192.0.2.10</td></tr><tr><td>2026-10-31T10:30:02+00:00</td><td>linux-lab</td><td>linux</td><td>authentication_failure</td><td>alice</td><td>192.0.2.10</td></tr><tr><td>2026-10-31T10:30:03+00:00</td><td>linux-lab</td><td>linux</td><td>authentication_failure</td><td>alice</td><td>192.0.2.10</td></tr><tr><td>2026-10-31T10:30:04+00:00</td><td>linux-lab</td><td>linux</td><td>authentication_failure</td><td>alice</td><td>192.0.2.10</td></tr><tr><td>2026-10-31T10:30:05+00:00</td><td>linux-lab</td><td>linux</td><td>authentication_success</td><td>alice</td><td>192.0.2.10</td></tr></tbody></table><h2>Retained evidence</h2><details><summary>Native and normalised event snapshots</summary><pre>[
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;109c454a-17d9-48b3-adec-55b83e443d25&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T10:30:00Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.362021Z&quot;,
+    &quot;operating_system&quot;: &quot;linux&quot;,
+    &quot;hostname&quot;: &quot;linux-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.10&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: {
+      &quot;pid&quot;: 42,
+      &quot;name&quot;: &quot;sshd&quot;,
+      &quot;executable&quot;: null,
+      &quot;command_line&quot;: null
+    },
+    &quot;source&quot;: &quot;synthetic-fixture:linux/suspicious/brute_force.txt&quot;,
+    &quot;native_event_id&quot;: &quot;sshd&quot;,
+    &quot;native_record_id&quot;: null,
+    &quot;raw&quot;: {
+      &quot;line&quot;: &quot;2026-10-31T10:30:00Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51000 ssh2&quot;
+    },
+    &quot;details&quot;: {
+      &quot;protocol&quot;: &quot;ssh&quot;,
+      &quot;source_port&quot;: 51000,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;e426f48e-901d-49aa-ac45-d288f9d0cd30&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T10:30:01Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.362021Z&quot;,
+    &quot;operating_system&quot;: &quot;linux&quot;,
+    &quot;hostname&quot;: &quot;linux-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.10&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: {
+      &quot;pid&quot;: 42,
+      &quot;name&quot;: &quot;sshd&quot;,
+      &quot;executable&quot;: null,
+      &quot;command_line&quot;: null
+    },
+    &quot;source&quot;: &quot;synthetic-fixture:linux/suspicious/brute_force.txt&quot;,
+    &quot;native_event_id&quot;: &quot;sshd&quot;,
+    &quot;native_record_id&quot;: null,
+    &quot;raw&quot;: {
+      &quot;line&quot;: &quot;2026-10-31T10:30:01Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51001 ssh2&quot;
+    },
+    &quot;details&quot;: {
+      &quot;protocol&quot;: &quot;ssh&quot;,
+      &quot;source_port&quot;: 51001,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;6f6947f8-1868-40fd-985e-b0c5f19590ad&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T10:30:02Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.363022Z&quot;,
+    &quot;operating_system&quot;: &quot;linux&quot;,
+    &quot;hostname&quot;: &quot;linux-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.10&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: {
+      &quot;pid&quot;: 42,
+      &quot;name&quot;: &quot;sshd&quot;,
+      &quot;executable&quot;: null,
+      &quot;command_line&quot;: null
+    },
+    &quot;source&quot;: &quot;synthetic-fixture:linux/suspicious/brute_force.txt&quot;,
+    &quot;native_event_id&quot;: &quot;sshd&quot;,
+    &quot;native_record_id&quot;: null,
+    &quot;raw&quot;: {
+      &quot;line&quot;: &quot;2026-10-31T10:30:02Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51002 ssh2&quot;
+    },
+    &quot;details&quot;: {
+      &quot;protocol&quot;: &quot;ssh&quot;,
+      &quot;source_port&quot;: 51002,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;ed454417-f701-47f9-9860-a5b2ea7d311a&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T10:30:03Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.363022Z&quot;,
+    &quot;operating_system&quot;: &quot;linux&quot;,
+    &quot;hostname&quot;: &quot;linux-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.10&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: {
+      &quot;pid&quot;: 42,
+      &quot;name&quot;: &quot;sshd&quot;,
+      &quot;executable&quot;: null,
+      &quot;command_line&quot;: null
+    },
+    &quot;source&quot;: &quot;synthetic-fixture:linux/suspicious/brute_force.txt&quot;,
+    &quot;native_event_id&quot;: &quot;sshd&quot;,
+    &quot;native_record_id&quot;: null,
+    &quot;raw&quot;: {
+      &quot;line&quot;: &quot;2026-10-31T10:30:03Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51003 ssh2&quot;
+    },
+    &quot;details&quot;: {
+      &quot;protocol&quot;: &quot;ssh&quot;,
+      &quot;source_port&quot;: 51003,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;efeb5f67-8fc1-4101-a70b-9d459f075c4c&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T10:30:04Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.363022Z&quot;,
+    &quot;operating_system&quot;: &quot;linux&quot;,
+    &quot;hostname&quot;: &quot;linux-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.10&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: {
+      &quot;pid&quot;: 42,
+      &quot;name&quot;: &quot;sshd&quot;,
+      &quot;executable&quot;: null,
+      &quot;command_line&quot;: null
+    },
+    &quot;source&quot;: &quot;synthetic-fixture:linux/suspicious/brute_force.txt&quot;,
+    &quot;native_event_id&quot;: &quot;sshd&quot;,
+    &quot;native_record_id&quot;: null,
+    &quot;raw&quot;: {
+      &quot;line&quot;: &quot;2026-10-31T10:30:04Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51004 ssh2&quot;
+    },
+    &quot;details&quot;: {
+      &quot;protocol&quot;: &quot;ssh&quot;,
+      &quot;source_port&quot;: 51004,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;75276926-8296-42d7-8532-f68c76401c1f&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T10:30:05Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.363022Z&quot;,
+    &quot;operating_system&quot;: &quot;linux&quot;,
+    &quot;hostname&quot;: &quot;linux-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.10&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_success&quot;,
+    &quot;outcome&quot;: &quot;success&quot;,
+    &quot;process&quot;: {
+      &quot;pid&quot;: 42,
+      &quot;name&quot;: &quot;sshd&quot;,
+      &quot;executable&quot;: null,
+      &quot;command_line&quot;: null
+    },
+    &quot;source&quot;: &quot;synthetic-fixture:linux/suspicious/brute_force.txt&quot;,
+    &quot;native_event_id&quot;: &quot;sshd&quot;,
+    &quot;native_record_id&quot;: null,
+    &quot;raw&quot;: {
+      &quot;line&quot;: &quot;2026-10-31T10:30:05Z linux-lab sshd[42]: Accepted password for alice from 192.0.2.10 port 51005 ssh2&quot;
+    },
+    &quot;details&quot;: {
+      &quot;protocol&quot;: &quot;ssh&quot;,
+      &quot;source_port&quot;: 51005,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  }
+]</pre></details></body></html>

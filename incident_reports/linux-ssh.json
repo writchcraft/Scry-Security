@@ -1,0 +1,309 @@
+{
+  "report_version": 1,
+  "incident_id": "da8876c9-88ab-4bd5-9413-ff819265a6c4",
+  "created_at": "2026-11-01T20:10:48.436116Z",
+  "title": "Suspected SSH brute-force activity",
+  "summary": "Five SSH password failures are followed by an accepted password for the same account and source.",
+  "analyst": "Synthetic lab author",
+  "status": "investigating",
+  "synthetic": true,
+  "affected_hosts": [
+    "linux-lab"
+  ],
+  "operating_systems": [
+    "linux"
+  ],
+  "accounts": [
+    "alice"
+  ],
+  "source_addresses": [
+    "192.0.2.10"
+  ],
+  "destination_addresses": [],
+  "alerts": [
+    {
+      "finding_id": "ec8c591c-92ed-55b3-9a10-398933d663e3",
+      "rule_id": "SCRY-AUTH-003",
+      "name": "Success after repeated failures",
+      "description": "Successful authentication follows five failures for the same source and account.",
+      "severity": "high",
+      "timestamp": "2026-10-31T10:30:05Z",
+      "operating_system": "linux",
+      "hostname": "linux-lab",
+      "username": "alice",
+      "source_ip": "192.0.2.10",
+      "event_ids": [
+        "109c454a-17d9-48b3-adec-55b83e443d25",
+        "e426f48e-901d-49aa-ac45-d288f9d0cd30",
+        "6f6947f8-1868-40fd-985e-b0c5f19590ad",
+        "ed454417-f701-47f9-9860-a5b2ea7d311a",
+        "efeb5f67-8fc1-4101-a70b-9d459f075c4c",
+        "75276926-8296-42d7-8532-f68c76401c1f"
+      ],
+      "evidence_count": 6,
+      "mitre_techniques": [],
+      "false_positives": "Expired credentials, user mistakes, and authorised testing can explain this pattern.",
+      "investigation": "Check native outcomes, source ownership, account history, and surrounding activity.",
+      "defensive_actions": "Validate with the owner; apply rate limiting and review account protection if unauthorised.",
+      "synthetic": true,
+      "context": {},
+      "assessment": "Suspicious activity requiring investigation; compromise is not confirmed.",
+      "alert_id": "29b7f761-aa1e-575a-800a-294bd7fc650b",
+      "revision": 1,
+      "status": "new",
+      "updated_at": "2026-11-01T20:10:48.419459Z",
+      "history": []
+    },
+    {
+      "finding_id": "03cbdef8-295d-59cb-88eb-ea28299c7b91",
+      "rule_id": "SCRY-AUTH-001",
+      "name": "Repeated authentication failures",
+      "description": "Five failures for one source and account within five minutes.",
+      "severity": "high",
+      "timestamp": "2026-10-31T10:30:04Z",
+      "operating_system": "linux",
+      "hostname": "linux-lab",
+      "username": "alice",
+      "source_ip": "192.0.2.10",
+      "event_ids": [
+        "109c454a-17d9-48b3-adec-55b83e443d25",
+        "e426f48e-901d-49aa-ac45-d288f9d0cd30",
+        "6f6947f8-1868-40fd-985e-b0c5f19590ad",
+        "ed454417-f701-47f9-9860-a5b2ea7d311a",
+        "efeb5f67-8fc1-4101-a70b-9d459f075c4c"
+      ],
+      "evidence_count": 5,
+      "mitre_techniques": [
+        "T1110"
+      ],
+      "false_positives": "Expired credentials, user mistakes, and authorised testing can explain this pattern.",
+      "investigation": "Check native outcomes, source ownership, account history, and surrounding activity.",
+      "defensive_actions": "Validate with the owner; apply rate limiting and review account protection if unauthorised.",
+      "synthetic": true,
+      "context": {},
+      "assessment": "Suspicious activity requiring investigation; compromise is not confirmed.",
+      "alert_id": "e38b75e1-7d0e-53a4-9163-93f299d3f3f7",
+      "revision": 1,
+      "status": "new",
+      "updated_at": "2026-11-01T20:10:48.416942Z",
+      "history": []
+    }
+  ],
+  "timeline": [
+    {
+      "schema_version": 1,
+      "event_id": "109c454a-17d9-48b3-adec-55b83e443d25",
+      "timestamp": "2026-10-31T10:30:00Z",
+      "ingested_at": "2026-11-01T20:10:48.362021Z",
+      "operating_system": "linux",
+      "hostname": "linux-lab",
+      "username": "alice",
+      "source_ip": "192.0.2.10",
+      "destination_ip": null,
+      "category": "authentication",
+      "event_type": "authentication_failure",
+      "outcome": "failure",
+      "process": {
+        "pid": 42,
+        "name": "sshd",
+        "executable": null,
+        "command_line": null
+      },
+      "source": "synthetic-fixture:linux/suspicious/brute_force.txt",
+      "native_event_id": "sshd",
+      "native_record_id": null,
+      "raw": {
+        "line": "2026-10-31T10:30:00Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51000 ssh2"
+      },
+      "details": {
+        "protocol": "ssh",
+        "source_port": 51000,
+        "authentication_channel": "network"
+      },
+      "context": {},
+      "synthetic": true
+    },
+    {
+      "schema_version": 1,
+      "event_id": "e426f48e-901d-49aa-ac45-d288f9d0cd30",
+      "timestamp": "2026-10-31T10:30:01Z",
+      "ingested_at": "2026-11-01T20:10:48.362021Z",
+      "operating_system": "linux",
+      "hostname": "linux-lab",
+      "username": "alice",
+      "source_ip": "192.0.2.10",
+      "destination_ip": null,
+      "category": "authentication",
+      "event_type": "authentication_failure",
+      "outcome": "failure",
+      "process": {
+        "pid": 42,
+        "name": "sshd",
+        "executable": null,
+        "command_line": null
+      },
+      "source": "synthetic-fixture:linux/suspicious/brute_force.txt",
+      "native_event_id": "sshd",
+      "native_record_id": null,
+      "raw": {
+        "line": "2026-10-31T10:30:01Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51001 ssh2"
+      },
+      "details": {
+        "protocol": "ssh",
+        "source_port": 51001,
+        "authentication_channel": "network"
+      },
+      "context": {},
+      "synthetic": true
+    },
+    {
+      "schema_version": 1,
+      "event_id": "6f6947f8-1868-40fd-985e-b0c5f19590ad",
+      "timestamp": "2026-10-31T10:30:02Z",
+      "ingested_at": "2026-11-01T20:10:48.363022Z",
+      "operating_system": "linux",
+      "hostname": "linux-lab",
+      "username": "alice",
+      "source_ip": "192.0.2.10",
+      "destination_ip": null,
+      "category": "authentication",
+      "event_type": "authentication_failure",
+      "outcome": "failure",
+      "process": {
+        "pid": 42,
+        "name": "sshd",
+        "executable": null,
+        "command_line": null
+      },
+      "source": "synthetic-fixture:linux/suspicious/brute_force.txt",
+      "native_event_id": "sshd",
+      "native_record_id": null,
+      "raw": {
+        "line": "2026-10-31T10:30:02Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51002 ssh2"
+      },
+      "details": {
+        "protocol": "ssh",
+        "source_port": 51002,
+        "authentication_channel": "network"
+      },
+      "context": {},
+      "synthetic": true
+    },
+    {
+      "schema_version": 1,
+      "event_id": "ed454417-f701-47f9-9860-a5b2ea7d311a",
+      "timestamp": "2026-10-31T10:30:03Z",
+      "ingested_at": "2026-11-01T20:10:48.363022Z",
+      "operating_system": "linux",
+      "hostname": "linux-lab",
+      "username": "alice",
+      "source_ip": "192.0.2.10",
+      "destination_ip": null,
+      "category": "authentication",
+      "event_type": "authentication_failure",
+      "outcome": "failure",
+      "process": {
+        "pid": 42,
+        "name": "sshd",
+        "executable": null,
+        "command_line": null
+      },
+      "source": "synthetic-fixture:linux/suspicious/brute_force.txt",
+      "native_event_id": "sshd",
+      "native_record_id": null,
+      "raw": {
+        "line": "2026-10-31T10:30:03Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51003 ssh2"
+      },
+      "details": {
+        "protocol": "ssh",
+        "source_port": 51003,
+        "authentication_channel": "network"
+      },
+      "context": {},
+      "synthetic": true
+    },
+    {
+      "schema_version": 1,
+      "event_id": "efeb5f67-8fc1-4101-a70b-9d459f075c4c",
+      "timestamp": "2026-10-31T10:30:04Z",
+      "ingested_at": "2026-11-01T20:10:48.363022Z",
+      "operating_system": "linux",
+      "hostname": "linux-lab",
+      "username": "alice",
+      "source_ip": "192.0.2.10",
+      "destination_ip": null,
+      "category": "authentication",
+      "event_type": "authentication_failure",
+      "outcome": "failure",
+      "process": {
+        "pid": 42,
+        "name": "sshd",
+        "executable": null,
+        "command_line": null
+      },
+      "source": "synthetic-fixture:linux/suspicious/brute_force.txt",
+      "native_event_id": "sshd",
+      "native_record_id": null,
+      "raw": {
+        "line": "2026-10-31T10:30:04Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51004 ssh2"
+      },
+      "details": {
+        "protocol": "ssh",
+        "source_port": 51004,
+        "authentication_channel": "network"
+      },
+      "context": {},
+      "synthetic": true
+    },
+    {
+      "schema_version": 1,
+      "event_id": "75276926-8296-42d7-8532-f68c76401c1f",
+      "timestamp": "2026-10-31T10:30:05Z",
+      "ingested_at": "2026-11-01T20:10:48.363022Z",
+      "operating_system": "linux",
+      "hostname": "linux-lab",
+      "username": "alice",
+      "source_ip": "192.0.2.10",
+      "destination_ip": null,
+      "category": "authentication",
+      "event_type": "authentication_success",
+      "outcome": "success",
+      "process": {
+        "pid": 42,
+        "name": "sshd",
+        "executable": null,
+        "command_line": null
+      },
+      "source": "synthetic-fixture:linux/suspicious/brute_force.txt",
+      "native_event_id": "sshd",
+      "native_record_id": null,
+      "raw": {
+        "line": "2026-10-31T10:30:05Z linux-lab sshd[42]: Accepted password for alice from 192.0.2.10 port 51005 ssh2"
+      },
+      "details": {
+        "protocol": "ssh",
+        "source_port": 51005,
+        "authentication_channel": "network"
+      },
+      "context": {},
+      "synthetic": true
+    }
+  ],
+  "observed_evidence": [
+    "6 supporting events retained from 2 alert(s).",
+    "Event times span 2026-10-31T10:30:00+00:00 to 2026-10-31T10:30:05+00:00.",
+    "SCRY-AUTH-003: 6 supporting event(s); status new.",
+    "SCRY-AUTH-001: 5 supporting event(s); status new."
+  ],
+  "analyst_findings": "The sequence warrants investigation. It does not establish hostile access; check whether the account owner or an authorised lab exercise explains the activity.",
+  "possible_false_positives": [
+    "Expired credentials, user mistakes, and authorised testing can explain this pattern."
+  ],
+  "recommended_actions": [
+    "Validate with the owner; apply rate limiting and review account protection if unauthorised."
+  ],
+  "mitre_techniques": [
+    "T1110"
+  ],
+  "assessment": "Rule matches identify suspicious activity; they do not confirm compromise."
+}

@@ -1,0 +1,712 @@
+- rule_id: SCRY-AUTH-001
+  name: Repeated authentication failures
+  description: Five failures for one source and account within five minutes.
+  severity: high
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - normalised authentication events
+  mode: threshold
+  event_types:
+  - authentication_failure
+  group_by:
+  - operating_system
+  - hostname
+  - source_ip
+  - username
+  conditions: {}
+  exclude: {}
+  threshold: 5
+  window_seconds: 300
+  distinct_field: null
+  preceding_event_type: null
+  mitre_techniques:
+  - T1110
+  false_positives: Expired credentials, user mistakes, and authorised testing can explain this
+    pattern.
+  investigation: Check native outcomes, source ownership, account history, and surrounding activity.
+  defensive_actions: Validate with the owner; apply rate limiting and review account protection
+    if unauthorised.
+- rule_id: SCRY-AUTH-002
+  name: Multiple accounts targeted
+  description: Five distinct accounts fail authentication from one source within five minutes.
+  severity: high
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - normalised authentication events
+  mode: distinct
+  event_types:
+  - authentication_failure
+  group_by:
+  - operating_system
+  - hostname
+  - source_ip
+  conditions: {}
+  exclude: {}
+  threshold: 5
+  window_seconds: 300
+  distinct_field: username
+  preceding_event_type: null
+  mitre_techniques:
+  - T1110
+  false_positives: Expired credentials, user mistakes, and authorised testing can explain this
+    pattern.
+  investigation: Check native outcomes, source ownership, account history, and surrounding activity.
+  defensive_actions: Validate with the owner; apply rate limiting and review account protection
+    if unauthorised.
+- rule_id: SCRY-AUTH-003
+  name: Success after repeated failures
+  description: Successful authentication follows five failures for the same source and account.
+  severity: high
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - normalised authentication events
+  mode: sequence
+  event_types:
+  - authentication_success
+  group_by:
+  - operating_system
+  - hostname
+  - source_ip
+  - username
+  conditions: {}
+  exclude: {}
+  threshold: 5
+  window_seconds: 300
+  distinct_field: null
+  preceding_event_type: authentication_failure
+  mitre_techniques: []
+  false_positives: Expired credentials, user mistakes, and authorised testing can explain this
+    pattern.
+  investigation: Check native outcomes, source ownership, account history, and surrounding activity.
+  defensive_actions: Validate with the owner; apply rate limiting and review account protection
+    if unauthorised.
+- rule_id: SCRY-ACCOUNT-001
+  name: Built-in Administrators membership added
+  description: A member was added to the Windows built-in Administrators group; verify authorisation.
+  severity: high
+  operating_systems:
+  - windows
+  required_sources:
+  - Windows Security 4732
+  mode: threshold
+  event_types:
+  - group_membership_added
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  conditions:
+    details.TargetSid:
+    - S-1-5-32-544
+  exclude: {}
+  threshold: 1
+  window_seconds: 300
+  distinct_field: null
+  preceding_event_type: null
+  mitre_techniques:
+  - T1098
+  false_positives: Approved administrator provisioning or endpoint management.
+  investigation: Identify actor and added member by SID; verify the change ticket and subsequent
+    logons.
+  defensive_actions: If unauthorised, remove membership after preserving evidence and review
+    actor access.
+- rule_id: SCRY-SYSTEM-001
+  name: Security audit log cleared
+  description: A Windows Security audit log clearing event was observed.
+  severity: high
+  operating_systems:
+  - windows
+  required_sources:
+  - Windows Security 1102
+  mode: threshold
+  event_types:
+  - audit_log_cleared
+  group_by:
+  - operating_system
+  - hostname
+  conditions: {}
+  exclude: {}
+  threshold: 1
+  window_seconds: 300
+  distinct_field: null
+  preceding_event_type: null
+  mitre_techniques:
+  - T1685.005
+  false_positives: Authorised maintenance or lab reset.
+  investigation: Validate the actor and maintenance approval; examine remote copies and adjacent
+    events.
+  defensive_actions: Preserve remaining evidence and restrict log-clearing rights if unauthorised.
+- rule_id: SCRY-NETWORK-001
+  name: Repeated watched-port connection observations
+  description: Five newly observed connections to an explicitly watched destination port in
+    five minutes.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Connection metadata with an explicitly configured watched-port policy
+  event_types:
+  - network_connection
+  conditions:
+    details.policy_violation:
+    - true
+  group_by:
+  - operating_system
+  - hostname
+  - destination_ip
+  threshold: 5
+  window_seconds: 300
+  mitre_techniques: []
+  false_positives: Approved applications or repeated reconnects to a locally watched service.
+  investigation: Validate the destination, configured port policy, process ownership and business
+    purpose. Snapshot observations do not prove connection attempts or direction.
+  defensive_actions: If unauthorised, review the process and restrict the destination under
+    local change control.
+- rule_id: SCRY-FILE-001
+  name: Configured file baseline changed
+  description: Creation, content modification or deletion observed within an explicitly approved
+    file integrity scope.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Approved local file-integrity baseline and a completed comparison
+  event_types:
+  - file_created
+  - file_modified
+  - file_deleted
+  conditions:
+    source:
+    - file-integrity
+  group_by:
+  - operating_system
+  - hostname
+  - details.path
+  threshold: 1
+  window_seconds: 1
+  mitre_techniques: []
+  false_positives: Approved updates, configuration changes and application-generated files.
+  investigation: Compare hashes and change records, inspect the new file safely, and verify
+    the responsible owner. A changed hash alone does not prove malicious content.
+  defensive_actions: Preserve evidence and validate the change. Restore an approved version
+    if unauthorised; create a new approved baseline only after review.
+- rule_id: SCRY-AUTH-004
+  name: Repeated account lockouts
+  description: Three lockout events affect the same host/account in fifteen minutes; no source
+    IP is assumed.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Windows Security 4740 or equivalent canonical lockout telemetry
+  mode: threshold
+  event_types:
+  - account_locked
+  conditions: {}
+  threshold: 3
+  window_seconds: 900
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  mitre_techniques: []
+  false_positives: Stale service credentials, saved passwords or user mistakes.
+  investigation: Check the caller-computer field and authentication failures across the relevant
+    domain controllers or hosts.
+  defensive_actions: Identify stale credentials or unauthorised attempts before unlocking or
+    changing account protections.
+- rule_id: SCRY-PRIVILEGE-001
+  name: Repeated denied sudo attempts
+  description: Three recorded sudo denials for one account in five minutes.
+  severity: medium
+  operating_systems:
+  - linux
+  required_sources:
+  - Linux sudo denial records in authentication logs or journal
+  mode: threshold
+  event_types:
+  - privilege_use
+  conditions:
+    details.mechanism:
+    - sudo
+    outcome:
+    - failure
+  threshold: 3
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  mitre_techniques:
+  - T1548.003
+  false_positives: An administrator correcting a sudo configuration or a user misunderstanding
+    access.
+  investigation: Verify invoking account, requested access and local sudo policy. Denials do
+    not prove successful escalation.
+  defensive_actions: Review access with the owner; preserve relevant logs before changing sudo
+    policy.
+- rule_id: SCRY-PRIVILEGE-002
+  name: Sudo outside configured account policy
+  description: A sudo attempt targets a configured privileged account from an account outside
+    the approved sudo list.
+  severity: medium
+  operating_systems:
+  - linux
+  required_sources:
+  - Linux sudo records and an explicit host policy
+  mode: threshold
+  event_types:
+  - privilege_use
+  conditions:
+    context.sudo_use:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  mitre_techniques:
+  - T1548.003
+  false_positives: Temporary delegated administration or an outdated local policy.
+  investigation: Verify the invoking and target accounts, authorisation records and actual command
+    outcome.
+  defensive_actions: Reconcile approved access; restrict unauthorised delegation after preserving
+    evidence.
+- rule_id: SCRY-PRIVILEGE-003
+  name: Privilege assignment outside configured account policy
+  description: Sensitive privileges were assigned to an account outside the configured allowlist.
+  severity: medium
+  operating_systems:
+  - windows
+  required_sources:
+  - Windows Security 4672 and an explicit privilege-account allowlist
+  mode: threshold
+  event_types:
+  - privileges_assigned
+  conditions:
+    context.privilege_assignment:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  mitre_techniques: []
+  false_positives: Approved administrators or service identities absent from the configured
+    inventory.
+  investigation: Review privileges and logon IDs, account ownership and adjacent logon events;
+    assignment alone does not prove abuse.
+  defensive_actions: Update validated inventory or review excessive rights with the system owner.
+- rule_id: SCRY-AUTH-005
+  name: Privileged logon outside approved networks
+  description: A configured privileged account logged on from an address outside its approved
+    networks.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Successful remote authentication with an address and explicit privileged-account/network
+    policy
+  mode: threshold
+  event_types:
+  - authentication_success
+  conditions:
+    context.admin_logon:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  mitre_techniques: []
+  false_positives: Approved VPN ranges, jump hosts or travel not reflected in the policy.
+  investigation: Verify source ownership, account authorisation and Windows logon type or SSH
+    context.
+  defensive_actions: Confirm the session with the owner; restrict unauthorised privileged access
+    under local procedures.
+- rule_id: SCRY-ACCOUNT-002
+  name: Account lifecycle outside configured approval lists
+  description: Account creation or deletion falls outside configured approval lists and the
+    actor is not explicitly approved.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Account creation/deletion telemetry and an explicit host policy
+  mode: threshold
+  event_types:
+  - account_created
+  - account_deleted
+  conditions:
+    context.account_change:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  mitre_techniques: []
+  false_positives: Joiner/leaver workflows or approved automation missing from the inventory.
+  investigation: Distinguish actor from affected account and verify provisioning/deletion approval.
+  defensive_actions: Preserve account and group evidence; reconcile approved lifecycle activity
+    before remediation.
+- rule_id: SCRY-ACCOUNT-003
+  name: Configured protected account changed
+  description: A configured protected/security-related account changed without an explicitly
+    approved actor.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Account-change telemetry and an explicit protected-account policy
+  mode: threshold
+  event_types:
+  - account_created
+  - account_deleted
+  - account_modified
+  conditions:
+    context.protected_account:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  mitre_techniques:
+  - T1098
+  false_positives: Scheduled account maintenance or emergency administration.
+  investigation: Review actor, affected identity and actual changed fields against approved
+    maintenance.
+  defensive_actions: Validate ownership and restore approved settings only if the change is
+    unauthorised.
+- rule_id: SCRY-ACCOUNT-004
+  name: Configured privileged-group membership changed
+  description: Membership of a configured privileged group changed without an explicitly approved
+    actor.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Group-membership telemetry and explicit privileged-group policy
+  mode: threshold
+  event_types:
+  - group_membership_added
+  - group_membership_removed
+  - group_membership_changed
+  conditions:
+    context.group_change:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  mitre_techniques:
+  - T1098
+  false_positives: Approved provisioning or role removal not represented in local policy.
+  investigation: Verify group identifier, member, actor and approval. Windows SIDs are preferable
+    to localised names.
+  defensive_actions: Preserve evidence and review unauthorised membership with the account owner.
+- rule_id: SCRY-SYSTEM-002
+  name: Configured service or unit-file policy review
+  description: A service installation or explicitly monitored Linux service-unit file change
+    falls outside configured inventory or affects a protected service.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Native service-installation telemetry or approved file-integrity unit-directory monitoring,
+    plus explicit host policy
+  mode: threshold
+  event_types:
+  - service_installed
+  - file_created
+  - file_modified
+  - file_deleted
+  conditions:
+    context.service_change:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  mitre_techniques: []
+  false_positives: Approved software installation or management agents.
+  investigation: Review service identity, executable path, actor availability and software/change
+    approval.
+  defensive_actions: Investigate unknown binaries safely and remove a service only after validating
+    authorisation.
+- rule_id: SCRY-SYSTEM-003
+  name: Configured task or scheduling-file policy review
+  description: A task/crontab change or explicitly monitored scheduling-file change falls outside
+    configured inventory or affects a protected task.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Windows task events, Linux crontab journal messages, or approved scheduling-file monitoring,
+    plus explicit host policy
+  mode: threshold
+  event_types:
+  - scheduled_task_created
+  - scheduled_task_updated
+  - scheduled_task_deleted
+  - file_created
+  - file_modified
+  - file_deleted
+  conditions:
+    context.task_change:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  mitre_techniques: []
+  false_positives: Approved backups, software updaters or management automation.
+  investigation: Inspect task definition, principal, triggers and actions against the change
+    record.
+  defensive_actions: Preserve the definition and disable unauthorised execution only under an
+    approved response procedure.
+- rule_id: SCRY-SYSTEM-004
+  name: Configured security or audit change requires review
+  description: A security/audit configuration change occurred on a host configured to review
+    such changes.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Security/audit change telemetry and explicit host opt-in
+  mode: threshold
+  event_types:
+  - audit_policy_changed
+  - defender_configuration_changed
+  conditions:
+    context.security_change:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  mitre_techniques: []
+  false_positives: Policy deployment, Defender updates or authorised security maintenance.
+  investigation: Compare native changed values with baseline and identify the responsible actor
+    where telemetry permits.
+  defensive_actions: Confirm approved policy and restore impaired settings if investigation
+    supports that action.
+- rule_id: SCRY-PROCESS-001
+  name: Process matches an explicit watch policy
+  description: A recorded process name or available command line matches an explicitly configured
+    watch condition.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Process-execution metadata and an explicit host watch list
+  mode: threshold
+  event_types:
+  - process_created
+  conditions:
+    context.process_execution:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  mitre_techniques: []
+  false_positives: Approved administrative utilities or lab software.
+  investigation: Check full executable path, signer/hash where available, parent context and
+    account authorisation.
+  defensive_actions: Preserve evidence and investigate safely; a name match does not establish
+    malicious code.
+- rule_id: SCRY-PROCESS-002
+  name: PowerShell decoding and dynamic-invocation indicators
+  description: A script block contains FromBase64String and an IEX/Invoke-Expression token;
+    review actual script behaviour.
+  severity: medium
+  operating_systems:
+  - windows
+  required_sources:
+  - Configured PowerShell script-block telemetry containing both indicators in one block
+  mode: threshold
+  event_types:
+  - powershell_script_block
+  conditions:
+    context.powershell_indicators:
+    - true
+  threshold: 1
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  mitre_techniques:
+  - T1059.001
+  false_positives: Legitimate encoded configuration loading or authorised administrative scripts,
+    including comments mentioning these terms.
+  investigation: Inspect the complete block and surrounding execution context without executing
+    decoded content.
+  defensive_actions: Validate ownership and preserve script evidence; restrict unauthorised
+    script execution under local policy.
+- rule_id: SCRY-NETWORK-002
+  name: Repeated connections to a watched destination
+  description: Five new connection observations target an explicitly watched destination within
+    five minutes.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - New connection observations and explicit destination watch networks
+  mode: threshold
+  event_types:
+  - network_connection
+  conditions:
+    context.network_destination:
+    - true
+  threshold: 5
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - destination_ip
+  mitre_techniques: []
+  false_positives: Approved service reconnects or an outdated destination watch list.
+  investigation: Review destination ownership, process and business purpose. Local/remote metadata
+    does not establish direction.
+  defensive_actions: Validate the local network policy before restricting a destination.
+- rule_id: SCRY-NETWORK-003
+  name: Configured connection-observation burst
+  description: One hundred new connection observations occur in one minute on an opted-in host.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - New connection observations and explicit burst-review opt-in
+  mode: threshold
+  event_types:
+  - network_connection
+  conditions:
+    context.connection_burst:
+    - true
+  threshold: 100
+  window_seconds: 60
+  group_by:
+  - operating_system
+  - hostname
+  mitre_techniques: []
+  false_positives: Browsers, updates, connection pools or legitimate load tests.
+  investigation: Compare expected workload, observed tuple changes and process ownership. Polling
+    misses short-lived connections.
+  defensive_actions: Tune the rule against local workload before applying any defensive restrictions.
+- rule_id: SCRY-NETWORK-004
+  name: Repeated DNS queries for a watched domain
+  description: Three observable DNS queries match an explicitly watched domain suffix in five
+    minutes.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Observable DNS query metadata and an explicit domain suffix watch list
+  mode: threshold
+  event_types:
+  - dns_query
+  conditions:
+    context.dns_query:
+    - true
+  threshold: 3
+  window_seconds: 300
+  group_by:
+  - operating_system
+  - hostname
+  - context.dns_name
+  mitre_techniques: []
+  false_positives: Authorised test domains, cached application retries or stale watch indicators.
+  investigation: Validate the domain indicator, client process and query context. Encrypted
+    DNS is not inferred.
+  defensive_actions: Preserve the capture metadata and apply approved DNS/network controls if
+    the indicator is confirmed.
+- rule_id: SCRY-AUTH-006
+  name: Repeated local interactive authentication failures
+  description: Ten local interactive account failures occur in five minutes. Missing IPs are
+    not treated as one remote attacker.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - Local interactive authentication telemetry with an explicit normalised local channel
+  event_types:
+  - authentication_failure
+  conditions:
+    source_ip:
+    - null
+    details.authentication_channel:
+    - local
+  group_by:
+  - operating_system
+  - hostname
+  - username
+  threshold: 10
+  window_seconds: 300
+  mitre_techniques:
+  - T1110
+  false_positives: A user repeatedly entering stale credentials at the local console.
+  investigation: Verify the native logon channel, affected account and local session context.
+    No source address is inferred.
+  defensive_actions: Confirm legitimate access and account protection with the owner before
+    taking action.
+- rule_id: SCRY-NETWORK-005
+  name: Repeated watched outbound TCP initiations
+  description: Three TCP SYN_SENT observations target an explicitly watched network within five
+    minutes.
+  severity: medium
+  operating_systems:
+  - windows
+  - linux
+  required_sources:
+  - TCP connection metadata including SYN_SENT and explicit watched-destination policy
+  event_types:
+  - network_connection
+  conditions:
+    context.outbound_initiation:
+    - true
+  group_by:
+  - operating_system
+  - hostname
+  - destination_ip
+  threshold: 3
+  window_seconds: 300
+  mitre_techniques: []
+  false_positives: Authorised clients retrying a blocked or unreachable service.
+  investigation: Verify process ownership, destination policy and session outcome. Established
+    snapshots alone do not prove initiation direction.
+  defensive_actions: Validate the destination and preserve metadata before applying approved
+    egress restrictions.

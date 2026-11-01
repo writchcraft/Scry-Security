@@ -1,0 +1,21 @@
+# Explicit local collection. No audit policy is changed.
+poll_seconds = 5
+synthetic = false
+
+[[sources]]
+source_id = "windows-security"
+kind = "windows_eventlog"
+channel = "Security"
+max_records = 250
+
+[[sources]]
+source_id = "windows-system"
+kind = "windows_eventlog"
+channel = "System"
+max_records = 250
+
+[[sources]]
+source_id = "connection-metadata"
+kind = "connections"
+max_records = 10000
+watched_ports = []

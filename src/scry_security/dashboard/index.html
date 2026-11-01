@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Scry-Security local security investigations"
+    />
+    <title>Scry-Security · Security operations</title>
+    <link rel="icon" href="/static/logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/chart.umd.min.js" defer></script>
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="/"
+        ><img src="/static/logo.svg" alt="" width="42" height="42" /><span
+          >SCRY<span class="brand-light"> SECURITY</span></span
+        ></a
+      >
+      <p class="eyebrow">SECURITY OPERATIONS</p>
+      <nav aria-label="Main navigation" id="navigation">
+        <button data-view="overview" class="active">Overview</button>
+        <button data-view="events">Security Events</button>
+        <button data-view="detection">Threat Detection</button>
+        <button data-view="alerts">Alerts</button>
+        <button data-view="authentication">Authentication Monitoring</button>
+        <button data-view="windows">Windows Monitoring</button>
+        <button data-view="linux">Linux Monitoring</button>
+        <button data-view="network">Network Analysis</button>
+        <button data-view="files">File Integrity</button>
+        <button data-view="reports">Incident Reports</button>
+        <button data-view="rules">Detection Rules</button>
+        <button data-view="settings">Settings</button>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="status-dot"></span> Local investigation workspace
+        <p>See what others don't.</p>
+      </div>
+    </aside>
+    <main>
+      <header class="topbar">
+        <span>WORKSPACE <span class="muted">/ Security operations</span></span
+        ><span id="connection-state">Locked</span>
+      </header>
+      <section class="login panel" id="login">
+        <p class="eyebrow">PRIVATE BY DEFAULT</p>
+        <h1>Bring the evidence into focus.</h1>
+        <p>
+          Connect to your local Scry database with the API token configured for
+          this server.
+        </p>
+        <form id="login-form">
+          <label for="token">API token</label>
+          <div class="inline">
+            <input
+              id="token"
+              type="password"
+              autocomplete="off"
+              required
+              minlength="32"
+            /><button class="primary" type="submit">Unlock workspace</button>
+          </div>
+        </form>
+        <p class="muted">
+          The token stays in this page's memory. Reloading locks the workspace.
+        </p>
+      </section>
+      <section id="workspace" hidden>
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">SCRY INTELLIGENCE</p>
+            <h1 id="view-title">Security overview</h1>
+            <p class="muted" id="view-description">
+              An evidence-led view of your stored security activity.
+            </p>
+          </div>
+          <div class="controls">
+            <label for="data-mode">Evidence</label
+            ><select id="data-mode">
+              <option value="true">Synthetic lab data</option>
+              <option value="false">Real evidence</option>
+              <option value="all">All evidence</option></select
+            ><button id="refresh">Refresh</button
+            ><button id="lock">Lock</button>
+          </div>
+        </div>
+        <div class="notice" id="data-notice">
+          Synthetic lab evidence. Findings describe scenarios, not real
+          incidents.
+        </div>
+        <details class="panel">
+          <summary>Table filters · host, OS, rule and UTC dates</summary>
+          <p class="muted">
+            Apply to event and alert tables. Overview metrics cover all stored
+            dates in the selected evidence mode.
+          </p>
+          <div class="controls">
+            <label for="os-filter">OS</label
+            ><select id="os-filter">
+              <option value="">All</option>
+              <option value="windows">Windows</option>
+              <option value="linux">Linux</option></select
+            ><label for="host-filter">Hostname</label
+            ><input id="host-filter" type="text" maxlength="1024" /><label
+              for="rule-filter"
+              >Rule ID (alerts)</label
+            ><input id="rule-filter" type="text" maxlength="80" /><label
+              for="since-filter"
+              >Since (UTC)</label
+            ><input id="since-filter" type="datetime-local" /><label
+              for="until-filter"
+              >Until (UTC)</label
+            ><input id="until-filter" type="datetime-local" /><button
+              id="apply-filters"
+            >
+              Apply table filters
+            </button>
+          </div>
+        </details>
+        <section id="overview-view">
+          <div id="metrics" class="metrics"></div>
+          <div class="chart-grid">
+            <article class="panel wide">
+              <div class="panel-heading">
+                <h2>Authentication activity</h2>
+                <span class="muted">Latest 24 stored hours · UTC</span>
+              </div>
+              <div class="chart-wrap">
+                <canvas
+                  id="activity-chart"
+                  aria-label="Stored authentication event counts by hour"
+                  role="img"
+                ></canvas>
+              </div>
+            </article>
+            <article class="panel">
+              <h2>Alert severity</h2>
+              <div class="chart-wrap">
+                <canvas
+                  id="severity-chart"
+                  aria-label="Alert counts by severity"
+                  role="img"
+                ></canvas>
+              </div>
+            </article>
+          </div>
+          <div class="lower-grid">
+            <article class="panel">
+              <h2>Host coverage</h2>
+              <div class="chart-wrap compact">
+                <canvas
+                  id="os-chart"
+                  aria-label="Observed hosts by operating system"
+                  role="img"
+                ></canvas>
+              </div>
+              <p class="muted">
+                Hosts observed in stored evidence. This does not establish live
+                collector health.
+              </p>
+            </article>
+            <article class="panel">
+              <h2>Sources associated with findings</h2>
+              <div id="top-sources"></div>
+            </article>
+          </div>
+        </section>
+        <section class="panel" id="alerts-view">
+          <div class="panel-heading">
+            <h2 id="alert-table-title">Recent detection activity</h2>
+            <div class="controls">
+              <label for="severity-filter">Severity</label
+              ><select id="severity-filter">
+                <option value="">All</option>
+                <option>critical</option>
+                <option>high</option>
+                <option>medium</option>
+                <option>low</option></select
+              ><label for="status-filter">Status</label
+              ><select id="status-filter">
+                <option value="">All</option>
+                <option value="new">New</option>
+                <option value="investigating">Investigating</option>
+                <option value="resolved">Resolved</option>
+                <option value="false_positive">False positive</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Detection / host</th>
+                  <th>Severity</th>
+                  <th>UTC time</th>
+                  <th>Status</th>
+                  <th>Evidence</th>
+                  <th>Investigate</th>
+                </tr>
+              </thead>
+              <tbody id="alert-rows"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button id="alerts-prev">Previous</button
+            ><span id="alerts-page"></span
+            ><button id="alerts-next">Next</button>
+          </div>
+        </section>
+        <section class="panel" id="events-view" hidden>
+          <div class="panel-heading">
+            <h2>Security event timeline</h2>
+            <span class="muted">Native evidence retained · UTC</span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>UTC time</th>
+                  <th>Event type</th>
+                  <th>Host / OS</th>
+                  <th>Account</th>
+                  <th>Source</th>
+                  <th>Inspect</th>
+                </tr>
+              </thead>
+              <tbody id="event-rows"></tbody>
+            </table>
+          </div>
+          <div class="pagination">
+            <button id="events-prev">Previous</button
+            ><span id="events-page"></span
+            ><button id="events-next">Next</button>
+          </div>
+        </section>
+        <section id="rules-view" hidden>
+          <div id="rule-cards" class="rule-grid"></div>
+        </section>
+        <section class="panel" id="other-view" hidden></section>
+      </section>
+      <p id="message" role="status" aria-live="polite"></p>
+    </main>
+    <dialog id="investigation">
+      <div class="dialog-heading">
+        <h2 id="dialog-title">Investigation</h2>
+        <button id="close-dialog" aria-label="Close investigation">
+          Close
+        </button>
+      </div>
+      <div id="dialog-content"></div>
+    </dialog>
+  </body>
+</html>

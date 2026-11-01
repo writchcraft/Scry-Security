@@ -1,0 +1,6 @@
+2026-10-31T10:30:00Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51000 ssh2
+2026-10-31T10:30:01Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51001 ssh2
+2026-10-31T10:30:02Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51002 ssh2
+2026-10-31T10:30:03Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51003 ssh2
+2026-10-31T10:30:04Z linux-lab sshd[42]: Failed password for alice from 192.0.2.10 port 51004 ssh2
+2026-10-31T10:30:05Z linux-lab sshd[42]: Accepted password for alice from 192.0.2.10 port 51005 ssh2

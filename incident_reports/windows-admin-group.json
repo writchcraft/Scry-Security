@@ -1,0 +1,105 @@
+{
+  "report_version": 1,
+  "incident_id": "c4055c81-4f96-45b1-9bf2-309a6f41da5e",
+  "created_at": "2026-11-01T20:10:48.821143Z",
+  "title": "Windows privileged-group membership review",
+  "summary": "A synthetic 4732 record adds a member SID to the built-in Administrators group.",
+  "analyst": "Synthetic lab author",
+  "status": "investigating",
+  "synthetic": true,
+  "affected_hosts": [
+    "windows-lab"
+  ],
+  "operating_systems": [
+    "windows"
+  ],
+  "accounts": [
+    "S-1-5-21-123-1001"
+  ],
+  "source_addresses": [],
+  "destination_addresses": [],
+  "alerts": [
+    {
+      "finding_id": "6c481943-f2a9-59b6-b038-cd91dc7cfa13",
+      "rule_id": "SCRY-ACCOUNT-001",
+      "name": "Built-in Administrators membership added",
+      "description": "A member was added to the Windows built-in Administrators group; verify authorisation.",
+      "severity": "high",
+      "timestamp": "2026-10-31T11:30:10Z",
+      "operating_system": "windows",
+      "hostname": "windows-lab",
+      "username": "S-1-5-21-123-1001",
+      "source_ip": null,
+      "event_ids": [
+        "f3611ee6-1359-4c54-bd90-a28c6f5c5b8e"
+      ],
+      "evidence_count": 1,
+      "mitre_techniques": [
+        "T1098"
+      ],
+      "false_positives": "Approved administrator provisioning or endpoint management.",
+      "investigation": "Identify actor and added member by SID; verify the change ticket and subsequent logons.",
+      "defensive_actions": "If unauthorised, remove membership after preserving evidence and review actor access.",
+      "synthetic": true,
+      "context": {},
+      "assessment": "Suspicious activity requiring investigation; compromise is not confirmed.",
+      "alert_id": "41c027cd-7534-5f7d-b2d1-00ba859fa5f3",
+      "revision": 1,
+      "status": "new",
+      "updated_at": "2026-11-01T20:10:48.807034Z",
+      "history": []
+    }
+  ],
+  "timeline": [
+    {
+      "schema_version": 1,
+      "event_id": "f3611ee6-1359-4c54-bd90-a28c6f5c5b8e",
+      "timestamp": "2026-10-31T11:30:10Z",
+      "ingested_at": "2026-11-01T20:10:48.773822Z",
+      "operating_system": "windows",
+      "hostname": "windows-lab",
+      "username": "S-1-5-21-123-1001",
+      "source_ip": null,
+      "destination_ip": null,
+      "category": "account",
+      "event_type": "group_membership_added",
+      "outcome": "success",
+      "process": null,
+      "source": "windows-eventlog:Security",
+      "native_event_id": "4732",
+      "native_record_id": "11",
+      "raw": {
+        "xml": "<Event xmlns=\"http://schemas.microsoft.com/win/2004/08/events/event\"><System><Provider Name=\"Microsoft-Windows-Security-Auditing\"/><EventID>4732</EventID><TimeCreated SystemTime=\"2026-10-31T11:30:10Z\"/><EventRecordID>11</EventRecordID><Channel>Security</Channel><Computer>windows-lab</Computer></System><EventData><Data Name=\"SubjectUserName\">operator</Data><Data Name=\"TargetUserName\">Administrators</Data><Data Name=\"TargetSid\">S-1-5-32-544</Data><Data Name=\"MemberSid\">S-1-5-21-123-1001</Data></EventData></Event>\r\n"
+      },
+      "details": {
+        "provider": "Microsoft-Windows-Security-Auditing",
+        "channel": "Security",
+        "SubjectUserName": "operator",
+        "TargetUserName": "Administrators",
+        "TargetSid": "S-1-5-32-544",
+        "MemberSid": "S-1-5-21-123-1001",
+        "group_name": "Administrators",
+        "actor": "operator",
+        "group_id": "S-1-5-32-544"
+      },
+      "context": {},
+      "synthetic": true
+    }
+  ],
+  "observed_evidence": [
+    "1 supporting events retained from 1 alert(s).",
+    "Event times span 2026-10-31T11:30:10+00:00 to 2026-10-31T11:30:10+00:00.",
+    "SCRY-ACCOUNT-001: 1 supporting event(s); status new."
+  ],
+  "analyst_findings": "The group SID identifies built-in Administrators. Change approval is absent, or subsequent actions; determine whether the actor was authorised before remediation.",
+  "possible_false_positives": [
+    "Approved administrator provisioning or endpoint management."
+  ],
+  "recommended_actions": [
+    "If unauthorised, remove membership after preserving evidence and review actor access."
+  ],
+  "mitre_techniques": [
+    "T1098"
+  ],
+  "assessment": "Rule matches identify suspicious activity; they do not confirm compromise."
+}

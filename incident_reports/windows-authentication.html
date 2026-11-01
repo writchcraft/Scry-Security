@@ -1,0 +1,188 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><title>Suspicious Windows authentication sequence · Scry-Security</title><style>body{font:15px/1.6 system-ui,sans-serif;max-width:1100px;margin:40px auto;padding:0 24px;color:#17213b;background:#f7f8fc}header{border-bottom:3px solid #7664c5;padding-bottom:20px}h1{font-size:30px}h2{margin-top:32px;color:#463975}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #ccd0de;padding:9px;text-align:left;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#e9ebf3;padding:20px;font-size:11px}.label{font-weight:700;letter-spacing:2px;color:#6552a1}.note{background:#e9e5f5;padding:15px}@media print{body{margin:0;background:white}details{display:block}}</style></head><body><header><p class="label">SYNTHETIC LAB INVESTIGATION</p><h1>Suspicious Windows authentication sequence</h1><p>Scry-Security · See what others don't.</p><p>Incident d3c3f384-5520-4612-9410-136dce5575b8<br>Created 2026-11-01T20:10:48.631529+00:00 · Status investigating<br>Analyst: Synthetic lab author</p></header><h2>Incident summary</h2><p>Five Windows failed logons are followed by a successful network logon for the same account and source.</p><p class="note">Rule matches identify suspicious activity; they do not confirm compromise.</p><h2>Affected scope</h2><ul><li>Hosts: windows-lab</li><li>Operating systems: windows</li><li>Accounts: alice</li><li>Source addresses: 192.0.2.11</li><li>Destination addresses: Unavailable</li></ul><h2>Observed evidence</h2><ul><li>6 supporting events retained from 2 alert(s).</li><li>Event times span 2026-10-31T11:30:00+00:00 to 2026-10-31T11:30:05+00:00.</li><li>SCRY-AUTH-003: 6 supporting event(s); status new.</li><li>SCRY-AUTH-001: 5 supporting event(s); status new.</li></ul><h2>Analyst interpretation</h2><p>The native LogonType is 3. Verify source ownership, failure codes and account history before interpreting the successful logon as account compromise.</p><h2>Detection context</h2><p>No additional host-policy context was recorded for these detections.</p><h2>Possible false positives</h2><ul><li>Expired credentials, user mistakes, and authorised testing can explain this pattern.</li></ul><h2>Recommended defensive actions</h2><ul><li>Validate with the owner; apply rate limiting and review account protection if unauthorised.</li></ul><h2>ATT&amp;CK references</h2><ul><li>T1110</li></ul><h2>UTC event timeline</h2><table><thead><tr><th>Time</th><th>Host</th><th>OS</th><th>Event</th><th>Account</th><th>Source</th></tr></thead><tbody><tr><td>2026-10-31T11:30:00+00:00</td><td>windows-lab</td><td>windows</td><td>authentication_failure</td><td>alice</td><td>192.0.2.11</td></tr><tr><td>2026-10-31T11:30:01+00:00</td><td>windows-lab</td><td>windows</td><td>authentication_failure</td><td>alice</td><td>192.0.2.11</td></tr><tr><td>2026-10-31T11:30:02+00:00</td><td>windows-lab</td><td>windows</td><td>authentication_failure</td><td>alice</td><td>192.0.2.11</td></tr><tr><td>2026-10-31T11:30:03+00:00</td><td>windows-lab</td><td>windows</td><td>authentication_failure</td><td>alice</td><td>192.0.2.11</td></tr><tr><td>2026-10-31T11:30:04+00:00</td><td>windows-lab</td><td>windows</td><td>authentication_failure</td><td>alice</td><td>192.0.2.11</td></tr><tr><td>2026-10-31T11:30:05+00:00</td><td>windows-lab</td><td>windows</td><td>authentication_success</td><td>alice</td><td>192.0.2.11</td></tr></tbody></table><h2>Retained evidence</h2><details><summary>Native and normalised event snapshots</summary><pre>[
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;e1181245-35fc-48ea-acbb-33838dabe384&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T11:30:00Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.569623Z&quot;,
+    &quot;operating_system&quot;: &quot;windows&quot;,
+    &quot;hostname&quot;: &quot;windows-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.11&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: null,
+    &quot;source&quot;: &quot;windows-eventlog:Security&quot;,
+    &quot;native_event_id&quot;: &quot;4625&quot;,
+    &quot;native_record_id&quot;: &quot;1&quot;,
+    &quot;raw&quot;: {
+      &quot;xml&quot;: &quot;&lt;Event xmlns=\&quot;http://schemas.microsoft.com/win/2004/08/events/event\&quot;&gt;&lt;System&gt;&lt;Provider Name=\&quot;Microsoft-Windows-Security-Auditing\&quot;/&gt;&lt;EventID&gt;4625&lt;/EventID&gt;&lt;TimeCreated SystemTime=\&quot;2026-10-31T11:30:00Z\&quot;/&gt;&lt;EventRecordID&gt;1&lt;/EventRecordID&gt;&lt;Channel&gt;Security&lt;/Channel&gt;&lt;Computer&gt;windows-lab&lt;/Computer&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data Name=\&quot;TargetUserName\&quot;&gt;alice&lt;/Data&gt;&lt;Data Name=\&quot;IpAddress\&quot;&gt;192.0.2.11&lt;/Data&gt;&lt;Data Name=\&quot;LogonType\&quot;&gt;3&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;\r\n&quot;
+    },
+    &quot;details&quot;: {
+      &quot;provider&quot;: &quot;Microsoft-Windows-Security-Auditing&quot;,
+      &quot;channel&quot;: &quot;Security&quot;,
+      &quot;TargetUserName&quot;: &quot;alice&quot;,
+      &quot;IpAddress&quot;: &quot;192.0.2.11&quot;,
+      &quot;LogonType&quot;: &quot;3&quot;,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;f344c2db-c61a-4f95-b80c-d298e724cf2b&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T11:30:01Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.569623Z&quot;,
+    &quot;operating_system&quot;: &quot;windows&quot;,
+    &quot;hostname&quot;: &quot;windows-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.11&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: null,
+    &quot;source&quot;: &quot;windows-eventlog:Security&quot;,
+    &quot;native_event_id&quot;: &quot;4625&quot;,
+    &quot;native_record_id&quot;: &quot;2&quot;,
+    &quot;raw&quot;: {
+      &quot;xml&quot;: &quot;&lt;Event xmlns=\&quot;http://schemas.microsoft.com/win/2004/08/events/event\&quot;&gt;&lt;System&gt;&lt;Provider Name=\&quot;Microsoft-Windows-Security-Auditing\&quot;/&gt;&lt;EventID&gt;4625&lt;/EventID&gt;&lt;TimeCreated SystemTime=\&quot;2026-10-31T11:30:01Z\&quot;/&gt;&lt;EventRecordID&gt;2&lt;/EventRecordID&gt;&lt;Channel&gt;Security&lt;/Channel&gt;&lt;Computer&gt;windows-lab&lt;/Computer&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data Name=\&quot;TargetUserName\&quot;&gt;alice&lt;/Data&gt;&lt;Data Name=\&quot;IpAddress\&quot;&gt;192.0.2.11&lt;/Data&gt;&lt;Data Name=\&quot;LogonType\&quot;&gt;3&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;\r\n&quot;
+    },
+    &quot;details&quot;: {
+      &quot;provider&quot;: &quot;Microsoft-Windows-Security-Auditing&quot;,
+      &quot;channel&quot;: &quot;Security&quot;,
+      &quot;TargetUserName&quot;: &quot;alice&quot;,
+      &quot;IpAddress&quot;: &quot;192.0.2.11&quot;,
+      &quot;LogonType&quot;: &quot;3&quot;,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;cec87cca-c3dd-438e-acba-c0e56c4fb784&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T11:30:02Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.569623Z&quot;,
+    &quot;operating_system&quot;: &quot;windows&quot;,
+    &quot;hostname&quot;: &quot;windows-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.11&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: null,
+    &quot;source&quot;: &quot;windows-eventlog:Security&quot;,
+    &quot;native_event_id&quot;: &quot;4625&quot;,
+    &quot;native_record_id&quot;: &quot;3&quot;,
+    &quot;raw&quot;: {
+      &quot;xml&quot;: &quot;&lt;Event xmlns=\&quot;http://schemas.microsoft.com/win/2004/08/events/event\&quot;&gt;&lt;System&gt;&lt;Provider Name=\&quot;Microsoft-Windows-Security-Auditing\&quot;/&gt;&lt;EventID&gt;4625&lt;/EventID&gt;&lt;TimeCreated SystemTime=\&quot;2026-10-31T11:30:02Z\&quot;/&gt;&lt;EventRecordID&gt;3&lt;/EventRecordID&gt;&lt;Channel&gt;Security&lt;/Channel&gt;&lt;Computer&gt;windows-lab&lt;/Computer&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data Name=\&quot;TargetUserName\&quot;&gt;alice&lt;/Data&gt;&lt;Data Name=\&quot;IpAddress\&quot;&gt;192.0.2.11&lt;/Data&gt;&lt;Data Name=\&quot;LogonType\&quot;&gt;3&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;\r\n&quot;
+    },
+    &quot;details&quot;: {
+      &quot;provider&quot;: &quot;Microsoft-Windows-Security-Auditing&quot;,
+      &quot;channel&quot;: &quot;Security&quot;,
+      &quot;TargetUserName&quot;: &quot;alice&quot;,
+      &quot;IpAddress&quot;: &quot;192.0.2.11&quot;,
+      &quot;LogonType&quot;: &quot;3&quot;,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;03137ecb-b7d0-4e0f-852a-63726b99e60e&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T11:30:03Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.569623Z&quot;,
+    &quot;operating_system&quot;: &quot;windows&quot;,
+    &quot;hostname&quot;: &quot;windows-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.11&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: null,
+    &quot;source&quot;: &quot;windows-eventlog:Security&quot;,
+    &quot;native_event_id&quot;: &quot;4625&quot;,
+    &quot;native_record_id&quot;: &quot;4&quot;,
+    &quot;raw&quot;: {
+      &quot;xml&quot;: &quot;&lt;Event xmlns=\&quot;http://schemas.microsoft.com/win/2004/08/events/event\&quot;&gt;&lt;System&gt;&lt;Provider Name=\&quot;Microsoft-Windows-Security-Auditing\&quot;/&gt;&lt;EventID&gt;4625&lt;/EventID&gt;&lt;TimeCreated SystemTime=\&quot;2026-10-31T11:30:03Z\&quot;/&gt;&lt;EventRecordID&gt;4&lt;/EventRecordID&gt;&lt;Channel&gt;Security&lt;/Channel&gt;&lt;Computer&gt;windows-lab&lt;/Computer&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data Name=\&quot;TargetUserName\&quot;&gt;alice&lt;/Data&gt;&lt;Data Name=\&quot;IpAddress\&quot;&gt;192.0.2.11&lt;/Data&gt;&lt;Data Name=\&quot;LogonType\&quot;&gt;3&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;\r\n&quot;
+    },
+    &quot;details&quot;: {
+      &quot;provider&quot;: &quot;Microsoft-Windows-Security-Auditing&quot;,
+      &quot;channel&quot;: &quot;Security&quot;,
+      &quot;TargetUserName&quot;: &quot;alice&quot;,
+      &quot;IpAddress&quot;: &quot;192.0.2.11&quot;,
+      &quot;LogonType&quot;: &quot;3&quot;,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;9a573abb-be15-4e2b-9c2a-2e06a9223384&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T11:30:04Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.569623Z&quot;,
+    &quot;operating_system&quot;: &quot;windows&quot;,
+    &quot;hostname&quot;: &quot;windows-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.11&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_failure&quot;,
+    &quot;outcome&quot;: &quot;failure&quot;,
+    &quot;process&quot;: null,
+    &quot;source&quot;: &quot;windows-eventlog:Security&quot;,
+    &quot;native_event_id&quot;: &quot;4625&quot;,
+    &quot;native_record_id&quot;: &quot;5&quot;,
+    &quot;raw&quot;: {
+      &quot;xml&quot;: &quot;&lt;Event xmlns=\&quot;http://schemas.microsoft.com/win/2004/08/events/event\&quot;&gt;&lt;System&gt;&lt;Provider Name=\&quot;Microsoft-Windows-Security-Auditing\&quot;/&gt;&lt;EventID&gt;4625&lt;/EventID&gt;&lt;TimeCreated SystemTime=\&quot;2026-10-31T11:30:04Z\&quot;/&gt;&lt;EventRecordID&gt;5&lt;/EventRecordID&gt;&lt;Channel&gt;Security&lt;/Channel&gt;&lt;Computer&gt;windows-lab&lt;/Computer&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data Name=\&quot;TargetUserName\&quot;&gt;alice&lt;/Data&gt;&lt;Data Name=\&quot;IpAddress\&quot;&gt;192.0.2.11&lt;/Data&gt;&lt;Data Name=\&quot;LogonType\&quot;&gt;3&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;\r\n&quot;
+    },
+    &quot;details&quot;: {
+      &quot;provider&quot;: &quot;Microsoft-Windows-Security-Auditing&quot;,
+      &quot;channel&quot;: &quot;Security&quot;,
+      &quot;TargetUserName&quot;: &quot;alice&quot;,
+      &quot;IpAddress&quot;: &quot;192.0.2.11&quot;,
+      &quot;LogonType&quot;: &quot;3&quot;,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  },
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;e1ac3123-3531-47b1-bf18-9c933d0531e7&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T11:30:05Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.569623Z&quot;,
+    &quot;operating_system&quot;: &quot;windows&quot;,
+    &quot;hostname&quot;: &quot;windows-lab&quot;,
+    &quot;username&quot;: &quot;alice&quot;,
+    &quot;source_ip&quot;: &quot;192.0.2.11&quot;,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;authentication&quot;,
+    &quot;event_type&quot;: &quot;authentication_success&quot;,
+    &quot;outcome&quot;: &quot;success&quot;,
+    &quot;process&quot;: null,
+    &quot;source&quot;: &quot;windows-eventlog:Security&quot;,
+    &quot;native_event_id&quot;: &quot;4624&quot;,
+    &quot;native_record_id&quot;: &quot;6&quot;,
+    &quot;raw&quot;: {
+      &quot;xml&quot;: &quot;&lt;Event xmlns=\&quot;http://schemas.microsoft.com/win/2004/08/events/event\&quot;&gt;&lt;System&gt;&lt;Provider Name=\&quot;Microsoft-Windows-Security-Auditing\&quot;/&gt;&lt;EventID&gt;4624&lt;/EventID&gt;&lt;TimeCreated SystemTime=\&quot;2026-10-31T11:30:05Z\&quot;/&gt;&lt;EventRecordID&gt;6&lt;/EventRecordID&gt;&lt;Channel&gt;Security&lt;/Channel&gt;&lt;Computer&gt;windows-lab&lt;/Computer&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data Name=\&quot;TargetUserName\&quot;&gt;alice&lt;/Data&gt;&lt;Data Name=\&quot;IpAddress\&quot;&gt;192.0.2.11&lt;/Data&gt;&lt;Data Name=\&quot;LogonType\&quot;&gt;3&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;\r\n&quot;
+    },
+    &quot;details&quot;: {
+      &quot;provider&quot;: &quot;Microsoft-Windows-Security-Auditing&quot;,
+      &quot;channel&quot;: &quot;Security&quot;,
+      &quot;TargetUserName&quot;: &quot;alice&quot;,
+      &quot;IpAddress&quot;: &quot;192.0.2.11&quot;,
+      &quot;LogonType&quot;: &quot;3&quot;,
+      &quot;authentication_channel&quot;: &quot;network&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  }
+]</pre></details></body></html>

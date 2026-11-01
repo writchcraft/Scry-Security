@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><title>Windows privileged-group membership review · Scry-Security</title><style>body{font:15px/1.6 system-ui,sans-serif;max-width:1100px;margin:40px auto;padding:0 24px;color:#17213b;background:#f7f8fc}header{border-bottom:3px solid #7664c5;padding-bottom:20px}h1{font-size:30px}h2{margin-top:32px;color:#463975}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #ccd0de;padding:9px;text-align:left;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#e9ebf3;padding:20px;font-size:11px}.label{font-weight:700;letter-spacing:2px;color:#6552a1}.note{background:#e9e5f5;padding:15px}@media print{body{margin:0;background:white}details{display:block}}</style></head><body><header><p class="label">SYNTHETIC LAB INVESTIGATION</p><h1>Windows privileged-group membership review</h1><p>Scry-Security · See what others don't.</p><p>Incident c4055c81-4f96-45b1-9bf2-309a6f41da5e<br>Created 2026-11-01T20:10:48.821143+00:00 · Status investigating<br>Analyst: Synthetic lab author</p></header><h2>Incident summary</h2><p>A synthetic 4732 record adds a member SID to the built-in Administrators group.</p><p class="note">Rule matches identify suspicious activity; they do not confirm compromise.</p><h2>Affected scope</h2><ul><li>Hosts: windows-lab</li><li>Operating systems: windows</li><li>Accounts: S-1-5-21-123-1001</li><li>Source addresses: Unavailable</li><li>Destination addresses: Unavailable</li></ul><h2>Observed evidence</h2><ul><li>1 supporting events retained from 1 alert(s).</li><li>Event times span 2026-10-31T11:30:10+00:00 to 2026-10-31T11:30:10+00:00.</li><li>SCRY-ACCOUNT-001: 1 supporting event(s); status new.</li></ul><h2>Analyst interpretation</h2><p>The group SID identifies built-in Administrators. Change approval is absent, or subsequent actions; determine whether the actor was authorised before remediation.</p><h2>Detection context</h2><p>No additional host-policy context was recorded for these detections.</p><h2>Possible false positives</h2><ul><li>Approved administrator provisioning or endpoint management.</li></ul><h2>Recommended defensive actions</h2><ul><li>If unauthorised, remove membership after preserving evidence and review actor access.</li></ul><h2>ATT&amp;CK references</h2><ul><li>T1098</li></ul><h2>UTC event timeline</h2><table><thead><tr><th>Time</th><th>Host</th><th>OS</th><th>Event</th><th>Account</th><th>Source</th></tr></thead><tbody><tr><td>2026-10-31T11:30:10+00:00</td><td>windows-lab</td><td>windows</td><td>group_membership_added</td><td>S-1-5-21-123-1001</td><td>Unavailable</td></tr></tbody></table><h2>Retained evidence</h2><details><summary>Native and normalised event snapshots</summary><pre>[
+  {
+    &quot;schema_version&quot;: 1,
+    &quot;event_id&quot;: &quot;f3611ee6-1359-4c54-bd90-a28c6f5c5b8e&quot;,
+    &quot;timestamp&quot;: &quot;2026-10-31T11:30:10Z&quot;,
+    &quot;ingested_at&quot;: &quot;2026-11-01T20:10:48.773822Z&quot;,
+    &quot;operating_system&quot;: &quot;windows&quot;,
+    &quot;hostname&quot;: &quot;windows-lab&quot;,
+    &quot;username&quot;: &quot;S-1-5-21-123-1001&quot;,
+    &quot;source_ip&quot;: null,
+    &quot;destination_ip&quot;: null,
+    &quot;category&quot;: &quot;account&quot;,
+    &quot;event_type&quot;: &quot;group_membership_added&quot;,
+    &quot;outcome&quot;: &quot;success&quot;,
+    &quot;process&quot;: null,
+    &quot;source&quot;: &quot;windows-eventlog:Security&quot;,
+    &quot;native_event_id&quot;: &quot;4732&quot;,
+    &quot;native_record_id&quot;: &quot;11&quot;,
+    &quot;raw&quot;: {
+      &quot;xml&quot;: &quot;&lt;Event xmlns=\&quot;http://schemas.microsoft.com/win/2004/08/events/event\&quot;&gt;&lt;System&gt;&lt;Provider Name=\&quot;Microsoft-Windows-Security-Auditing\&quot;/&gt;&lt;EventID&gt;4732&lt;/EventID&gt;&lt;TimeCreated SystemTime=\&quot;2026-10-31T11:30:10Z\&quot;/&gt;&lt;EventRecordID&gt;11&lt;/EventRecordID&gt;&lt;Channel&gt;Security&lt;/Channel&gt;&lt;Computer&gt;windows-lab&lt;/Computer&gt;&lt;/System&gt;&lt;EventData&gt;&lt;Data Name=\&quot;SubjectUserName\&quot;&gt;operator&lt;/Data&gt;&lt;Data Name=\&quot;TargetUserName\&quot;&gt;Administrators&lt;/Data&gt;&lt;Data Name=\&quot;TargetSid\&quot;&gt;S-1-5-32-544&lt;/Data&gt;&lt;Data Name=\&quot;MemberSid\&quot;&gt;S-1-5-21-123-1001&lt;/Data&gt;&lt;/EventData&gt;&lt;/Event&gt;\r\n&quot;
+    },
+    &quot;details&quot;: {
+      &quot;provider&quot;: &quot;Microsoft-Windows-Security-Auditing&quot;,
+      &quot;channel&quot;: &quot;Security&quot;,
+      &quot;SubjectUserName&quot;: &quot;operator&quot;,
+      &quot;TargetUserName&quot;: &quot;Administrators&quot;,
+      &quot;TargetSid&quot;: &quot;S-1-5-32-544&quot;,
+      &quot;MemberSid&quot;: &quot;S-1-5-21-123-1001&quot;,
+      &quot;group_name&quot;: &quot;Administrators&quot;,
+      &quot;actor&quot;: &quot;operator&quot;,
+      &quot;group_id&quot;: &quot;S-1-5-32-544&quot;
+    },
+    &quot;context&quot;: {},
+    &quot;synthetic&quot;: true
+  }
+]</pre></details></body></html>
