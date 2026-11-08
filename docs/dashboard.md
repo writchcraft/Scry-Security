@@ -84,5 +84,29 @@ and the table reflected the persisted update. Narrow and desktop layout
 breakpoints were inspected. A full overview screenshot is stored at
 `screenshots/dashboard-overview.jpg`. This is synthetic evidence, visibly labelled.
 
-No successful Linux runtime or live Windows Security log read is claimed by
-these browser/API results. GitHub Actions has not been pushed or run remotely.
+The initial browser results above describe an earlier development snapshot.
+The 8 November 2026 GUI update applies the supplied eleven-colour palette to
+backgrounds, navigation, cards, controls, chart datasets, status indicators and
+the SVG logo. Browser-computed CSS tokens matched every supplied hex value;
+the overview, chart area, alert badges and investigation dialog were inspected.
+Screenshots show the private synthetic review database (27 events, 12 alerts,
+four saved incidents), with colours taken from shared CSS tokens.
+
+| Role | Colour |
+| --- | --- |
+| Primary background | `#0B111B` |
+| Secondary background | `#101A28` |
+| Cards and surfaces | `#151F2E` |
+| Borders | `#263548` |
+| Primary accent | `#38BDF8` |
+| Protected/success state | `#00D6B2` |
+| Primary text | `#E7EEF7` |
+| Muted text | `#8C9DB2` |
+| Critical/error | `#FF5765` |
+| Warning | `#F5B942` |
+| Informational | `#818CF8` |
+
+The [initial remote CI run](https://github.com/writchcraft/Scry-Security/actions/runs/42491272049)
+passed on Windows/Ubuntu with Python 3.12/3.13. These results verify runtime tests
+and installation on those runners; permitted native Security-log and deployed
+Linux authentication-source checks remain separate release gates.

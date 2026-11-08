@@ -9,14 +9,17 @@ const state = {
   alert: null,
 };
 const pageSize = 25;
+const theme = (name) =>
+  getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
 function el(tag, text, className) {
   const node = document.createElement(tag);
   if (text != null) node.textContent = text;
   if (className) node.className = className;
   return node;
 }
-function message(text = "") {
+function message(text = "", error = false) {
   $("message").textContent = text;
+  $("message").dataset.error = String(error);
 }
 function modeParams() {
   const value = $("data-mode").value;
@@ -67,11 +70,11 @@ function lock() {
   $("dialog-content").replaceChildren();
   $("investigation").close();
 }
-function badge(text, severity = false) {
+function badge(text) {
   return el(
     "span",
     text.replaceAll("_", " "),
-    `badge${severity ? ` ${text}` : ""}`,
+    `badge ${text.replaceAll(" ", "_")}`,
   );
 }
 function date(value) {
@@ -119,20 +122,20 @@ function chart(id, type, labels, data, colors) {
           legend: {
             display: type !== "bar",
             position: "bottom",
-            labels: { color: "#aab7d0", boxWidth: 9, padding: 16 },
+            labels: { color: theme("muted"), boxWidth: 9, padding: 16 },
           },
         },
         scales:
           type === "bar"
             ? {
                 x: {
-                  ticks: { color: "#8b9bb7", maxTicksLimit: 8 },
+                  ticks: { color: theme("muted"), maxTicksLimit: 8 },
                   grid: { display: false },
                 },
                 y: {
                   beginAtZero: true,
-                  ticks: { color: "#8b9bb7", precision: 0 },
-                  grid: { color: "#26304a" },
+                  ticks: { color: theme("muted"), precision: 0 },
+                  grid: { color: theme("border") },
                 },
               }
             : {},
@@ -192,7 +195,7 @@ async function overview() {
     "bar",
     data.authentication_timeline.map((x) => x.hour.slice(5)),
     data.authentication_timeline.map((x) => x.count),
-    "#8d80e4",
+    theme("accent"),
   );
   const severityNames = ["critical", "high", "medium", "low"];
   chart(
@@ -200,14 +203,14 @@ async function overview() {
     "doughnut",
     severityNames,
     severityNames.map((x) => data.severity[x] || 0),
-    ["#d9567b", "#fa8eaa", "#d9b770", "#78b9e6"],
+    [theme("red"), theme("red"), theme("warning"), theme("info")],
   );
   chart(
     "os-chart",
     "doughnut",
     ["Windows", "Linux"],
     [data.hosts.windows || 0, data.hosts.linux || 0],
-    ["#8a85e8", "#5aa6ce"],
+    [theme("accent"), theme("success")],
   );
   $("top-sources").replaceChildren();
   if (!data.top_sources.length)
@@ -272,13 +275,13 @@ async function alerts() {
       ),
     );
     const severity = el("td");
-    severity.append(badge(alert.severity, true));
+    severity.append(badge(alert.severity));
     const status = el("td");
     status.append(badge(alert.status));
     const action = el("td"),
       button = el("button", "Open case");
     button.addEventListener("click", () =>
-      investigate(alert.alert_id).catch((e) => message(e.message)),
+      investigate(alert.alert_id).catch((e) => message(e.message, true)),
     );
     action.append(button);
     row.append(
@@ -343,7 +346,7 @@ async function rules() {
     card.append(
       el("code", rule.rule_id),
       el("h3", rule.name),
-      badge(rule.severity, true),
+      badge(rule.severity),
       el("p", rule.description),
       el(
         "p",
@@ -364,7 +367,7 @@ async function investigate(id) {
   const content = $("dialog-content");
   content.replaceChildren();
   content.append(
-    badge(alert.severity, true),
+    badge(alert.severity),
     el("p", alert.assessment),
     el("p", alert.description),
     el("h3", "Investigation guidance"),
@@ -577,7 +580,7 @@ async function reports() {
         );
         $("investigation").showModal();
       } catch (error) {
-        message(error.message);
+        message(error.message, true);
       }
     });
     controls.append(inspect);
@@ -585,7 +588,7 @@ async function reports() {
       const button = el("button", `Export ${format.toUpperCase()}`);
       button.addEventListener("click", () =>
         downloadReport(record.incident_id, format).catch((error) =>
-          message(error.message),
+          message(error.message, true),
         ),
       );
       controls.append(button);
@@ -777,7 +780,7 @@ $("login-form").addEventListener("submit", async (e) => {
     $("connection-state").textContent = "Authenticated · local";
     await refresh();
   } catch (error) {
-    message(error.message);
+    message(error.message, true);
   }
 });
 $("navigation").addEventListener("click", (e) => {
@@ -787,26 +790,26 @@ $("navigation").addEventListener("click", (e) => {
   document
     .querySelectorAll("nav button")
     .forEach((b) => b.classList.toggle("active", b === e.target));
-  if (state.token) refresh().catch((error) => message(error.message));
+  if (state.token) refresh().catch((error) => message(error.message, true));
 });
 $("refresh").addEventListener("click", () =>
-  refresh().catch((e) => message(e.message)),
+  refresh().catch((e) => message(e.message, true)),
 );
 $("lock").addEventListener("click", lock);
 $("close-dialog").addEventListener("click", () => $("investigation").close());
 for (const id of ["data-mode", "severity-filter", "status-filter"])
   $(id).addEventListener("change", () => {
     state.eventsOffset = state.alertsOffset = 0;
-    refresh().catch((e) => message(e.message));
+    refresh().catch((e) => message(e.message, true));
   });
 for (const type of ["events", "alerts"])
   for (const direction of ["prev", "next"])
     $(`${type}-${direction}`).addEventListener("click", () => {
       state[`${type}Offset`] += direction === "next" ? pageSize : -pageSize;
-      refresh().catch((e) => message(e.message));
+      refresh().catch((e) => message(e.message, true));
     });
 
 $("apply-filters").addEventListener("click", () => {
   state.eventsOffset = state.alertsOffset = 0;
-  refresh().catch((e) => message(e.message));
+  refresh().catch((e) => message(e.message, true));
 });
