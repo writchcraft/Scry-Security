@@ -1,8 +1,8 @@
 # Stage 3 — Linux authentication collection
 
 Target distributions are Ubuntu and Debian with Python 3.12+. Use the README's
-virtual-environment instructions first. This stage adds library adapters; the
-monitoring service and persistence arrive in later stages.
+virtual-environment instructions first. Library adapters are connected to the
+explicit monitoring commands and persistence described in `monitoring.md`.
 
 ## Historical parsing
 
@@ -37,7 +37,8 @@ installations have no authentication text file at all.
 
 The reader opens files in binary read-only mode, handles incomplete lines,
 malformed UTF-8, oversized lines, inode changes and detected truncation. File
-checkpoints are caller-owned until the storage/service stages. Rename-and-create
+checkpoints are caller-owned when using the library directly; the monitoring
+CLI stores them transactionally with events and alerts. Rename-and-create
 rotation may lose unread bytes from the old file. Copy-truncate followed by rapid
 regrowth can escape size-based truncation detection. Ingest archives separately
 when completeness matters; this is not an exactly-once transport.
@@ -66,4 +67,6 @@ References: [journalctl manual](https://www.freedesktop.org/software/systemd/man
 
 Run `python -m pytest tests/collectors/linux` using the environment's Python.
 Tests exercise synthetic messages, real temporary file polling and mocked journal
-execution on Windows. Native Linux execution still requires Linux CI/lab testing.
+execution. Ubuntu CI passed all 143 tests on Python 3.12/3.13 at `aaf1779`;
+successful native authentication log/journal acquisition still requires an
+authorised Linux environment. See `release_checklist.md` for current evidence.

@@ -10,8 +10,9 @@ YAML detections, evidence-backed alerts and saved investigations.
 
 **Development preview · 0.1.0.dev0 · MIT.** Windows installation, synthetic
 cross-platform scenarios and local dashboard workflows have been verified.
-Windows/Ubuntu CI has passed on Python 3.12/3.13. Permitted Windows Security-log
-and native Linux authentication-source reads remain release gates. See the [verification record](docs/verification.md)
+Windows/Ubuntu CI has passed on Python 3.12/3.13. Elevated Windows Security-log
+authentication acquisition and evidence preservation passed; genuine Linux
+authentication-source collection remains a release gate. See the [verification record](docs/verification.md)
 and [release checklist](docs/release_checklist.md). No v1.0 release is claimed.
 
 ![Dashboard displaying actual stored synthetic lab evidence](screenshots/dashboard-overview.jpg)
