@@ -23,7 +23,7 @@ jobs:
       - run: python -m scry_security --check
       - run: python -m build --wheel
       - run: python scripts/check_installed_wheel.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: checks-${{ matrix.os }}-${{ matrix.python }}
