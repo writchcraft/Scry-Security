@@ -1,5 +1,11 @@
 # Stage 3 — Linux authentication collection
 
+**Experimental on Linux.** Automated parser, journal and file-source tests run
+in Ubuntu CI. Genuine native authentication acquisition has not been verified.
+Linux native qualification is deferred beyond the Windows-first release;
+an Ubuntu VM is not a gate for that release. Existing Linux functionality and
+cross-platform CI remain intact.
+
 Target distributions are Ubuntu and Debian with Python 3.12+. Use the README's
 virtual-environment instructions first. Library adapters are connected to the
 explicit monitoring commands and persistence described in `monitoring.md`.
