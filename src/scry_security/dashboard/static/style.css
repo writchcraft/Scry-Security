@@ -1,21 +1,23 @@
 :root {
   color-scheme: dark;
-  --bg: #0b1020;
-  --panel: #11192d;
-  --border: #26304a;
-  --text: #e5eaf5;
-  --muted: #97a5bf;
-  --accent: #a398ff;
-  --blue: #69b8ef;
-  --red: #fc839b;
+  --bg: #0b111b;
+  --secondary: #101a28;
+  --panel: #151f2e;
+  --border: #263548;
+  --text: #e7eef7;
+  --muted: #8c9db2;
+  --accent: #38bdf8;
+  --success: #00d6b2;
+  --red: #ff5765;
+  --warning: #f5b942;
+  --info: #818cf8;
 }
 * {
   box-sizing: border-box;
 }
 body {
   margin: 0;
-  background:
-    radial-gradient(ellipse at 80% 0%, #1a1c3d 0, transparent 45%), var(--bg);
+  background: var(--bg);
   color: var(--text);
   font:
     14px/1.6 system-ui,
@@ -34,7 +36,7 @@ textarea {
 button,
 select {
   border: 1px solid var(--border);
-  background: #18223a;
+  background: var(--panel);
   border-radius: 7px;
   padding: 8px 13px;
 }
@@ -43,7 +45,7 @@ button {
 }
 button:hover {
   border-color: var(--accent);
-  background: #222c49;
+  background: var(--border);
 }
 button:disabled {
   opacity: 0.4;
@@ -51,8 +53,8 @@ button:disabled {
 }
 input,
 textarea {
-  background: #0b1326;
-  border: 1px solid #3e4c70;
+  background: var(--secondary);
+  border: 1px solid var(--border);
   border-radius: 7px;
   padding: 10px;
   width: 100%;
@@ -61,14 +63,14 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #afa4ff;
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 .sidebar {
   width: 240px;
   position: fixed;
   inset: 0 auto 0 0;
-  background: #0d1425;
+  background: var(--secondary);
   border-right: 1px solid var(--border);
   padding: 30px 18px;
   display: flex;
@@ -86,12 +88,12 @@ textarea:focus-visible {
 }
 .brand-light {
   font-weight: 400;
-  color: #a9b7d3;
+  color: var(--muted);
 }
 .eyebrow {
   font-size: 10px;
   letter-spacing: 2px;
-  color: #9a93d3;
+  color: var(--accent);
   font-weight: 700;
   margin: 0 0 9px;
 }
@@ -111,9 +113,9 @@ nav button {
   color: var(--muted);
 }
 nav button.active {
-  color: #d5cfff;
-  background: linear-gradient(90deg, #312b57, #1a2139);
-  box-shadow: inset 3px 0 #a495ff;
+  color: var(--accent);
+  background: rgb(56 189 248 / 12%);
+  box-shadow: inset 3px 0 var(--accent);
 }
 .sidebar-foot {
   margin-top: auto;
@@ -123,11 +125,11 @@ nav button.active {
 }
 .sidebar-foot p {
   font-style: italic;
-  color: #bcb3ed;
+  color: var(--muted);
 }
 .status-dot {
   display: inline-block;
-  background: #7bd5bb;
+  background: var(--success);
   border-radius: 50%;
   width: 6px;
   height: 6px;
@@ -146,7 +148,7 @@ main {
   justify-content: space-between;
   font-size: 10px;
   letter-spacing: 1px;
-  color: #b3bed3;
+  color: var(--muted);
 }
 .muted {
   color: var(--muted);
@@ -189,13 +191,13 @@ h3 {
   color: var(--muted);
 }
 .notice {
-  background: #1c233d;
-  border: 1px solid #393359;
-  border-left: 3px solid #a498f3;
+  background: var(--secondary);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--info);
   border-radius: 6px;
   padding: 11px 15px;
   font-size: 12px;
-  color: #c6c5df;
+  color: var(--text);
   margin-bottom: 23px;
 }
 .metrics {
@@ -208,7 +210,7 @@ h3 {
   padding: 18px 20px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: linear-gradient(135deg, #161f36, #11182b);
+  background: var(--panel);
 }
 .metric p {
   margin: 0;
@@ -224,10 +226,10 @@ h3 {
 }
 .metric small {
   font-size: 10px;
-  color: #9a94c7;
+  color: var(--muted);
 }
 .panel {
-  background: linear-gradient(125deg, #141c30, #10182a);
+  background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 11px;
   padding: 23px;
@@ -270,7 +272,7 @@ h3 {
 }
 .source-row code {
   font-size: 12px;
-  color: #b9c8e6;
+  color: var(--text);
 }
 .source-row span {
   color: var(--accent);
@@ -287,12 +289,12 @@ th {
   text-align: left;
   color: var(--muted);
   font-weight: 500;
-  background: #10182a;
+  background: var(--secondary);
   padding: 12px;
 }
 td {
   padding: 14px 12px;
-  border-top: 1px solid #232d43;
+  border-top: 1px solid var(--border);
   vertical-align: middle;
 }
 td small {
@@ -313,22 +315,22 @@ td button {
   border-radius: 5px;
   padding: 4px 7px;
   text-transform: uppercase;
-  background: #252c49;
-  color: #c3c7e5;
+  background: rgb(129 140 248 / 12%);
+  color: var(--info);
   white-space: nowrap;
 }
 .badge.high,
 .badge.critical {
-  background: #3b2235;
-  color: #ff94ab;
+  background: rgb(255 87 101 / 12%);
+  color: var(--red);
 }
 .badge.medium {
-  background: #3b3224;
-  color: #efc784;
+  background: rgb(245 185 66 / 12%);
+  color: var(--warning);
 }
 .badge.low {
-  background: #21394a;
-  color: #8acaf7;
+  background: rgb(129 140 248 / 12%);
+  color: var(--info);
 }
 .pagination {
   display: flex;
@@ -355,9 +357,35 @@ td button {
   color: var(--accent);
 }
 .primary {
-  background: #7564ce;
-  border-color: #9a87f6;
-  color: white;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+  font-weight: 650;
+}
+.primary:hover {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgb(56 189 248 / 18%);
+}
+a {
+  color: var(--accent);
+}
+.badge.resolved,
+.badge.available {
+  color: var(--success);
+  background: rgb(0 214 178 / 12%);
+}
+.badge.unavailable,
+.badge.permission_denied {
+  color: var(--red);
+  background: rgb(255 87 101 / 12%);
+}
+.badge.stale,
+.badge.degraded {
+  color: var(--warning);
+  background: rgb(245 185 66 / 12%);
+}
+#message[data-error="true"] {
+  color: var(--red);
 }
 .inline {
   display: flex;
@@ -379,16 +407,16 @@ td button {
   white-space: nowrap;
 }
 dialog {
-  background: #111a2e;
+  background: var(--panel);
   color: var(--text);
-  border: 1px solid #48557b;
+  border: 1px solid var(--border);
   border-radius: 12px;
   width: min(950px, 94vw);
   max-height: 90vh;
   padding: 28px;
 }
 dialog::backdrop {
-  background: #050918cc;
+  background: rgb(11 17 27 / 80%);
   backdrop-filter: blur(4px);
 }
 .dialog-heading {
@@ -404,7 +432,7 @@ dialog::backdrop {
 pre {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  background: #0b1222;
+  background: var(--secondary);
   border-radius: 7px;
   padding: 17px;
   font-size: 11px;
@@ -413,7 +441,7 @@ pre {
 }
 details summary {
   cursor: pointer;
-  color: #b5adf3;
+  color: var(--accent);
 }
 dialog label {
   display: block;
@@ -425,7 +453,7 @@ dialog form {
   margin-top: 22px;
 }
 #message {
-  color: #f2b2bd;
+  color: var(--success);
   min-height: 1.5em;
 }
 .empty {

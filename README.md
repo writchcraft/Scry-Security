@@ -10,8 +10,8 @@ YAML detections, evidence-backed alerts and saved investigations.
 
 **Development preview · 0.1.0.dev0 · MIT.** Windows installation, synthetic
 cross-platform scenarios and local dashboard workflows have been verified.
-Native Linux execution, a permitted Windows Security-log read and remote CI
-results remain release gates. See the [verification record](docs/verification.md)
+Windows/Ubuntu CI has passed on Python 3.12/3.13. Permitted Windows Security-log
+and native Linux authentication-source reads remain release gates. See the [verification record](docs/verification.md)
 and [release checklist](docs/release_checklist.md). No v1.0 release is claimed.
 
 ![Dashboard displaying actual stored synthetic lab evidence](screenshots/dashboard-overview.jpg)
@@ -125,8 +125,8 @@ starting a collector. The CLI's `--help` lists the implemented commands.
 ```
 
 Use `.venv/bin/python` on Linux. GitHub Actions defines Windows/Ubuntu runners
-with Python 3.12/3.13, plus dependency auditing; no successful remote run is claimed
-until recorded. See [verification](docs/verification.md), [contributing](CONTRIBUTING.md)
+with Python 3.12/3.13, plus dependency auditing. The
+[initial run passed all five jobs](https://github.com/writchcraft/Scry-Security/actions/runs/42491272049). See [verification](docs/verification.md), [contributing](CONTRIBUTING.md)
 and [security reporting](SECURITY.md).
 
 ## Security, limitations and roadmap
