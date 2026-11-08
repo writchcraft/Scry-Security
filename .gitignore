@@ -17,6 +17,8 @@ dist/
 .env.*
 !.env.example
 data/
+# Host verification results stay local, including aggregate audit summaries.
+docs/audits/
 *.db
 *.db-shm
 *.db-wal

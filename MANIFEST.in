@@ -7,4 +7,6 @@ recursive-include scripts *.py
 recursive-include screenshots *.jpg
 recursive-include tests *.py
 recursive-include .github *.yml
+prune docs/audits
+prune data
 global-exclude __pycache__ *.py[cod]

@@ -2,7 +2,9 @@
 
 ## Shared core, native collection
 
-Windows and Linux are equal design targets. Their telemetry differs, but the
+Windows 10/11 are the primary release targets; Linux adapters remain experimental.
+Both platforms retain the same shared architecture and mandatory CI. Their
+telemetry differs, but the
 meaning of a normalised authentication failure can be shared. Collection source
 and native event identifiers must remain attached to the evidence.
 
@@ -20,9 +22,14 @@ flowchart LR
     DB --> R[Incident reports]
 ```
 
-This diagram is the intended architecture. Stages 1–9 implement the core,
-initial collection/parsing, detection, alert workflow and SQLite storage.
-The web interface and incident exports are the next stages.
+This diagram describes the implemented pipeline: native collection and parsing,
+shared detection, durable SQLite evidence, authenticated dashboard and saved
+incident exports. Native Windows 11 verification covers Security/System reads,
+4624/4625/4672, re-parsing, persistence, deduplication and restart checkpoints.
+Host-specific native verification details remain private.
+The complete rule catalogue is additionally covered by synthetic automated tests.
+Native Linux authentication collection remains unverified; Ubuntu tests exercise
+fixtures and mocks. It is a deferred qualification, not a Windows release gate.
 
 For example, Windows event 4625 and a Linux SSH failure will map to a common
 authentication-failure event. A shared rule can count failures within a time
@@ -39,18 +46,20 @@ investigation. Missing addresses must not be treated as one shared attacker.
 - Detect capabilities separately from OS family. Windows identification does not
   prove Security log access, audit policy, or PowerShell telemetry availability.
   Linux identification does not prove auth.log, systemd, or journal access.
-  Future collectors will report available, unavailable, permission-denied, and
+  Collectors report available, unavailable, permission-denied, and
   degraded states rather than silently showing zero events.
-- Keep privileged collection separate from the web process. The future dashboard
-  should query stored results without inheriting collector privileges. Transport
+- Keep privileged collection separate from the web process. The dashboard
+  queries stored results without inheriting collector privileges. Transport
   and authentication will be designed before introducing remote collection.
 - Preserve raw evidence where justified, with retention and access controls.
-  Deduplication and durable source cursors will be needed for polling, restart,
-  journal continuation, and log rotation. Event time and ingestion time must be
-  distinct; timezone-free historical records need explicit source context.
+  Fingerprint deduplication and transactional source cursors support polling,
+  restart and journal continuation. Windows log clearing/record-ID reset still
+  requires operator reconciliation; lossless collection is not guaranteed.
+  Event time and ingestion time are distinct; timezone-free historical records
+  need explicit source context.
 - Bound buffers and correlation windows. An input flood must not cause unbounded
   memory growth. Malformed records need isolated errors and health counters.
-- File integrity monitoring will use explicit paths and separate baseline approval
+- File integrity monitoring uses explicit paths and separates baseline approval
   from comparison; silently accepting changed hashes defeats the purpose.
 
 ## Technology decisions
@@ -89,8 +98,8 @@ docs/
 .github/workflows/tests.yml
 ```
 
-Implemented packages now also include collectors/{windows,linux,network}, parsers,
-detection, alerts, database and services. API, reports and dashboard follow.
+Implemented packages also include collectors/{windows,linux,network}, parsers,
+detection, alerts, database, services, integrity, API, reports and dashboard.
 The default rule catalogue is packaged under `rule_catalog/` so installed commands
 can load it independently of the checkout. Root `rules/` documents custom catalogues;
 synthetic sample logs and future incident examples remain outside the package.

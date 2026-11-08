@@ -4,16 +4,16 @@
 
 **See what others don't.**
 
-Cross-platform defensive security monitoring in Python. Windows and Linux
+Windows-first defensive security monitoring in Python. Windows and Linux
 collectors translate native records into a shared UTC schema, 25 configurable
 YAML detections, evidence-backed alerts and saved investigations.
 
-**Development preview · 0.1.0.dev0 · MIT.** Windows installation, synthetic
-cross-platform scenarios and local dashboard workflows have been verified.
-Windows/Ubuntu CI has passed on Python 3.12/3.13. Elevated Windows Security-log
-authentication acquisition and evidence preservation passed; genuine Linux
-authentication-source collection remains a release gate. See the [verification record](docs/verification.md)
-and [release checklist](docs/release_checklist.md). No v1.0 release is claimed.
+**Windows-first release candidate · 1.0.0rc1 · MIT.** Windows 10/11 are the primary
+target platforms; native verification has run on Windows 11. Linux functionality
+is experimental until genuine native authentication collection can be verified.
+The shared architecture and Windows/Ubuntu automated tests remain supported.
+No Ubuntu VM is required for this release. See the evidence and remaining gates
+in the [release checklist](docs/release_checklist.md). No final v1.0 release is claimed.
 
 ![Dashboard displaying actual stored synthetic lab evidence](screenshots/dashboard-overview.jpg)
 
@@ -33,7 +33,8 @@ and [release checklist](docs/release_checklist.md). No v1.0 release is claimed.
 - Compares explicitly approved SHA-256 file baselines for creation, modification
   and deletion without collecting file contents.
 
-The shared core targets Windows 10/11 and Ubuntu/Debian with Python 3.12+.
+The shared core uses Python 3.12+. Windows 10/11 are primary targets;
+Ubuntu/Debian adapters remain experimental.
 Native collection depends on source availability, audit policy and permissions.
 Mocked collectors and fixtures do not establish native compatibility.
 
@@ -138,9 +139,17 @@ protect the database, tokens and exports, and never commit operational telemetry
 The API binds to loopback and requires a bearer token; it is not a multi-user
 remote SIEM. See [the security model](docs/security_model.md).
 
-Implemented: the shared pipeline, 25-rule catalogue, dashboard, reporting,
-explicit polling and file comparison. Experimental: native adapters pending full
-permitted-source verification on both platforms. Planned: verified v1.0,
+Verified on native Windows 11: Security/System acquisition, genuine 4624/4625/4672
+handling, raw evidence persistence, repeat collection and restart checkpoints.
+Private native test evidence is retained locally. Remote correlation requires an
+actual source IP; the default local rule has a ten-failure threshold.
+Verified through automated tests only: full 25-rule positive/negative coverage,
+other Windows event mappings and many error branches. Experimental on Linux:
+auth-file/journal acquisition, with native OS telemetry still unverified.
+Not yet verified: native Windows 10, remote-IP failure/success correlation and
+long-duration operation. See the checklist for exact evidence and feature status.
+Implemented: the shared pipeline, dashboard, reporting, explicit polling and file
+comparison. Planned: final v1.0 approval,
 installation/service hardening, broader telemetry and a future PostgreSQL option.
 There is no full Sigma compatibility, automatic remediation, lossless collection
 guarantee or live packet capture. ATT&CK mappings describe relevant behaviour,

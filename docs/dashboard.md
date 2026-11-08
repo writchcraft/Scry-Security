@@ -109,4 +109,15 @@ four saved incidents), with colours taken from shared CSS tokens.
 The [initial remote CI run](https://github.com/writchcraft/Scry-Security/actions/runs/42491272049)
 passed on Windows/Ubuntu with Python 3.12/3.13. These results verify runtime tests
 and installation on those runners; permitted native Security-log and deployed
-Linux authentication-source checks remain separate release gates.
+Linux authentication-source checks remain unverified and experimental; they are
+deferred beyond the Windows-first release. See the current release checklist.
+
+## Local access lifecycle
+
+The bearer token stays in page memory; refresh clears it and Lock hides the
+workspace and clears the page token. The server uses a single configured bearer
+secret, not per-user sessions: Lock does not revoke a copied token, and there is
+no idle expiry, server-side session registry, MFA or multiuser access control.
+Rotate the token and restart the server to revoke access. API responses specify
+`Cache-Control: no-store`; CSP and host checks restrict browser exposure.
+Run only on loopback as the ordinary user. Do not expose this service remotely.

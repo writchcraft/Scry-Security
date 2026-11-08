@@ -22,6 +22,7 @@ jobs:
       - run: python -m pytest --cov=scry_security --cov-branch --cov-report=term-missing --cov-report=xml --junitxml=test-results.xml
       - run: python -m scry_security --check
       - run: python -m build --wheel
+      - run: python scripts/check_installed_wheel.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
