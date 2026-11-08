@@ -71,8 +71,8 @@ mkdir -p "$HOME/scry-release"
 cd "$HOME/scry-release"
 git clone --branch codex/portfolio-preview https://github.com/writchcraft/Scry-Security.git
 cd Scry-Security
-git checkout --detach 87f0c53d8ccb91bb7aa571b3d3d5eb4b1c752adf
-test "$(git rev-parse HEAD)" = 87f0c53d8ccb91bb7aa571b3d3d5eb4b1c752adf
+git checkout --detach origin/codex/portfolio-preview
+git rev-parse HEAD  # Record and review this exact candidate before lab activity.
 # This is the exact application/verifier candidate requested for native testing.
 python3.12 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip

@@ -57,7 +57,7 @@ Tests cover native parsers, suspicious and benign patterns, SQLite transactions,
 auth, report escaping, file changes, source checkpoints and request budgets.
 Ruff and package advisory checks supplement tests; they do not prove absence of
 security flaws. See verification and release-checklist documents for actual
-results. Windows/Ubuntu CI passed on Python 3.12/3.13 at commit `aaf1779`.
-Elevated Windows Security acquisition/preservation passed on 8 November 2026.
+results. Windows/Ubuntu CI covers Python 3.12/3.13. Detailed native Windows
+qualification records remain private.
 Genuine Linux authentication collection remains unverified; mocked source tests
 must not be presented as native source certification.

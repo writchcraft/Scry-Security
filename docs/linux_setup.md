@@ -73,6 +73,6 @@ References: [journalctl manual](https://www.freedesktop.org/software/systemd/man
 
 Run `python -m pytest tests/collectors/linux` using the environment's Python.
 Tests exercise synthetic messages, real temporary file polling and mocked journal
-execution. Ubuntu CI passed all 143 tests on Python 3.12/3.13 at `aaf1779`;
+execution. Ubuntu CI exercises the parser and runtime on Python 3.12/3.13;
 successful native authentication log/journal acquisition still requires an
 authorised Linux environment. See `release_checklist.md` for current evidence.

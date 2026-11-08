@@ -127,8 +127,8 @@ starting a collector. The CLI's `--help` lists the implemented commands.
 ```
 
 Use `.venv/bin/python` on Linux. GitHub Actions defines Windows/Ubuntu runners
-with Python 3.12/3.13, plus dependency auditing. The
-[initial run passed all five jobs](https://github.com/writchcraft/Scry-Security/actions/runs/42491272049). See [verification](docs/verification.md), [contributing](CONTRIBUTING.md)
+with Python 3.12/3.13, plus dependency auditing. See
+[verification](docs/verification.md), [contributing](CONTRIBUTING.md)
 and [security reporting](SECURITY.md).
 
 ## Security, limitations and roadmap

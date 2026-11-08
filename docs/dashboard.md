@@ -106,11 +106,10 @@ four saved incidents), with colours taken from shared CSS tokens.
 | Warning | `#F5B942` |
 | Informational | `#818CF8` |
 
-The [initial remote CI run](https://github.com/writchcraft/Scry-Security/actions/runs/42491272049)
-passed on Windows/Ubuntu with Python 3.12/3.13. These results verify runtime tests
-and installation on those runners; permitted native Security-log and deployed
-Linux authentication-source checks remain unverified and experimental; they are
-deferred beyond the Windows-first release. See the current release checklist.
+Windows/Ubuntu CI runs on Python 3.12/3.13. Runtime tests and clean installation
+checks do not certify native source acquisition. Linux native authentication
+remains experimental and deferred beyond the Windows-first release. See the
+current release checklist.
 
 ## Local access lifecycle
 

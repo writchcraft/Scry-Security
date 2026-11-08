@@ -50,22 +50,12 @@ Removing files from the current tree does not remove copies from older Git histo
 
 ## Public CI evidence
 
-Implementation commit `e7ea8fbe0a021dd2564ea5f21ce3e326bede2c1d` passed
-[Actions run 42499198917](https://github.com/writchcraft/Scry-Security/actions/runs/42499198917).
-
-| Job | Result |
-| --- | --- |
-| Windows / Python 3.12 | Passed |
-| Windows / Python 3.13 | Passed |
-| Ubuntu / Python 3.12 | Passed |
-| Ubuntu / Python 3.13 | Passed |
-| Dependency audit | Passed |
-
-Every matrix job passed lint, formatting, tests with coverage, CLI diagnostics,
-wheel build and clean built-wheel installation. This record is a documentation
-follow-up to that exact implementation commit; its own CI is tracked separately.
-CI artifacts contain synthetic-test and runner data only. Private host results
-are not uploaded to GitHub or included in packages.
+Repository history was rewritten to remove private metadata. Older commit IDs
+and CI run links have been retired; prior local verification records remain
+private. Clean-history CI is tracked in [GitHub Actions](https://github.com/writchcraft/Scry-Security/actions).
+The source code, existing tests and workflow matrix are unchanged by the rewrite.
+CI artifacts contain synthetic-test and runner data only; private host evidence
+is not uploaded or packaged.
 
 ## Known limitations
 
